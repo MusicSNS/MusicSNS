@@ -13,23 +13,27 @@
 	<select id="searchMemberById" parameterType="map"
 		resultType="com.co.kr.domain.LoginDomain">
 		SELECT * FROM musicsns.member
-		WHERE mb_name LIKE CONCAT('%', #{mbName}, '%')
+		WHERE mb_name LIKE CONCAT('%',
+		#{mbName}, '%')
 	</select>
 	<!-- selectAll -->
 	<select id="mbAllList" resultType="com.co.kr.domain.LoginDomain"
 		parameterType="map">
 		SELECT * FROM musicsns.member order by mb_update_at
-		desc limit #{offset},
+		desc
+		limit #{offset},
 		#{contentnum}
 	</select>
 
 	<!-- create -->
 	<insert id="mbCreate"
 		parameterType="com.co.kr.domain.LoginDomain">
-		INSERT INTO musicsns.member(mb_id, mb_pw, mb_name, mb_level,
+		INSERT INTO musicsns.member(mb_id, mb_pw, mb_name,
+		mb_level,
 		mb_ip, mb_use,
 		mb_create_at, mb_update_at)
-		VALUES (#{mbId}, #{mbPw},
+		VALUES (#{mbId},
+		#{mbPw},
 		#{mbName}, #{mbLevel}, #{mbIp}, #{mbUse}, now(), now())
 	</insert>
 
@@ -43,7 +47,16 @@
 	<select id="mbDuplicationCheck" resultType="int"
 		parameterType="hashMap">
 		SELECT COUNT(*) FROM musicsns.member WHERE
-		mb_id=#{mbId} and mb_pw=#{mbPw}
+		mb_id=#{mbId}
+		or mb_name=#{mbName}
+	</select>
+
+	<!-- duplicationCheck -->
+	<select id="mbLoginCheck" resultType="int"
+		parameterType="hashMap">
+		SELECT COUNT(*) FROM musicsns.member WHERE
+		mb_id=#{mbId}
+		and mb_pw=#{mbPw}
 	</select>
 
 	<!-- mbGetId -->
@@ -68,7 +81,8 @@
 	<!-- delete -->
 	<delete id="mbRemove" parameterType="hashMap">
 		DELETE FROM
-		musicsns.member WHERE mb_id=#{mbId}
+		musicsns.member
+		WHERE mb_id=#{mbId}
 	</delete>
 
 	<update id="mbLevelUpdate"

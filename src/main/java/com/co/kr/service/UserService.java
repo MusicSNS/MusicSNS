@@ -25,6 +25,9 @@ public interface UserService {
     //mbDuplicationCheck
     public int mbDuplicationCheck(Map<String, String> map);
     
+    //login
+    public int mbLoginCheck(Map<String, String> map);
+    
     //update
     public void mbUpdate(LoginDomain loginDomain); 
     

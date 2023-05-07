@@ -17,12 +17,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.co.kr.domain.LoginDomain;
 import com.co.kr.service.UserService;
 import com.co.kr.util.AlertUtils;
 import com.co.kr.util.CommonUtils;
 import com.co.kr.vo.LoginVO;
-
+import com.co.kr.domain.LoginDomain;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -32,6 +31,7 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	
 	// 진입점
 	@GetMapping("/")
 	public String index() {
@@ -68,7 +68,6 @@ public class UserController {
 		return "pages/sign-up.html";
 	}
 	
-
 	// 초기화면 설정
 	@RequestMapping(value = "board")
 	public ModelAndView login(LoginVO loginDTO, HttpServletRequest request, HttpServletResponse response)
@@ -78,20 +77,21 @@ public class UserController {
 		Map<String, String> map = new HashMap();
 		map.put("mbId", loginDTO.getId());
 		map.put("mbPw", loginDTO.getPw());
-		int dupleCheck = userService.mbDuplicationCheck(map);
+		int loginCheck = userService.mbLoginCheck(map);
 		LoginDomain loginDomain = userService.mbGetId(map);
-		if (dupleCheck == 0) {
+		if (loginCheck == 0) {
 			String alertText = "없는 아이디이거나 패스워드가 잘못되었습니다. 가입해주세요";
-			String redirectPath = "/signin";
+			String redirectPath = "/main/signin";
 			CommonUtils.redirect(alertText, redirectPath, response);
 			return mav;
 		}
-//
-//		String IP = CommonUtils.getClientIP(request);
-//		session.setAttribute("ip", IP);
-//		session.setAttribute("id", loginDomain.getMbId());
-//		session.setAttribute("pw", loginDomain.getMbPw());
-//		session.setAttribute("mbLevel", loginDomain.getMbLevel());
+
+		String IP = CommonUtils.getClientIP(request);
+		session.setAttribute("ip", IP);
+		session.setAttribute("id", loginDomain.getMbId());
+		session.setAttribute("pw", loginDomain.getMbPw());
+		session.setAttribute("name", loginDomain.getMbName());
+		session.setAttribute("mbLevel", loginDomain.getMbLevel());
 //		session.setAttribute("mac", getLocalMacAddress());
 		mav.setViewName("index.html");
 		return mav;
@@ -109,49 +109,19 @@ public class UserController {
 			ModelAndView mav = new ModelAndView();
 			System.out.println("가입하기 POST");
 			loginDomain.setMbId(request.getParameter("id"));
-			loginDomain.setMbPw(request.getParameter("pw"));
 			loginDomain.setMbName(request.getParameter("name"));
-			loginDomain.setMbIp(CommonUtils.getClientIP(request));
-			loginDomain.setMbLevel(1);
-			loginDomain.setMbUse("Y");
-			if (check(request) == 1) {
-				System.out.println(check(request));
-				mav.addObject("data", new AlertUtils("아이디가 중복되었습니다.", "signin"));
-				mav.setViewName("alert/alert");
-				return mav;
-			}
-			userService.mbCreate(loginDomain);
-			mav.addObject("data", new AlertUtils("회원가입이 완료되었습니다.", "/main"));
-			System.out.println("가입 완료");
-			mav.setViewName("alert/alert");
-			return mav;
-		}
-
-		// 멤버관리에서 만들기 GET
-		@RequestMapping(value = "create", method = RequestMethod.GET)
-		public void create() {
-			System.out.println("가입하기 GET");
-		}
-
-		// 멤버관리에서 만들기 POST
-		@RequestMapping(value = "create", method = RequestMethod.POST)
-		public ModelAndView create(LoginDomain loginDomain, HttpServletResponse response, HttpServletRequest request,
-				AlertUtils alert) throws IOException {
-			ModelAndView mav = new ModelAndView();
-			System.out.println("가입하기 POST");
-			loginDomain.setMbId(request.getParameter("id"));
 			loginDomain.setMbPw(request.getParameter("pw"));
 			loginDomain.setMbIp(CommonUtils.getClientIP(request));
-			loginDomain.setMbLevel(1);
+			loginDomain.setMbLevel(0);
 			loginDomain.setMbUse("Y");
 			if (check(request) == 1) {
 				System.out.println(check(request));
-				mav.addObject("data", new AlertUtils("아이디가 중복되었습니다.", "adList"));
+				mav.addObject("data", new AlertUtils("이메일이나 닉네임이 중복되었습니다.", "signup"));
 				mav.setViewName("alert/alert");
 				return mav;
 			}
 			userService.mbCreate(loginDomain);
-			mav.addObject("data", new AlertUtils("멤버 추가가 완료되었습니다.", "adList"));
+			mav.addObject("data", new AlertUtils("회원가입이 완료되었습니다.", "signin"));
 			System.out.println("가입 완료");
 			mav.setViewName("alert/alert");
 			return mav;
@@ -162,10 +132,11 @@ public class UserController {
 		@RequestMapping(value = "check")
 		public int check(HttpServletRequest request) {
 			String id = request.getParameter("id");
-			System.out.println(id);
+			String name = request.getParameter("name");
 			// 중복체크
 			Map<String, String> map = new HashMap();
 			map.put("mbId", id);
+			map.put("mbName", name);
 			int i = userService.mbDuplicationCheck(map);
 			return i;
 		}

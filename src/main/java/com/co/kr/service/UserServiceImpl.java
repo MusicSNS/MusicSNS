@@ -56,6 +56,11 @@ public class UserServiceImpl implements UserService {
 	public int mbDuplicationCheck(Map<String, String> map) {
 		return userMapper.mbDuplicationCheck(map);
 	}
+	
+	@Override
+	public int mbLoginCheck(Map<String, String> map) {
+		return userMapper.mbLoginCheck(map);
+	}
 
 	@Override
 	public int mbGetAll() {
