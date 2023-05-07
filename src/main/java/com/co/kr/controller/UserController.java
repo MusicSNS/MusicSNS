@@ -1,8 +1,27 @@
 package com.co.kr.controller;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.co.kr.domain.LoginDomain;
+import com.co.kr.service.UserService;
+import com.co.kr.util.AlertUtils;
+import com.co.kr.util.CommonUtils;
+import com.co.kr.vo.LoginVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,6 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(value = "/")
 public class UserController {
 
+	@Autowired
+	private UserService userService;
 	// 진입점
 	@GetMapping("/")
 	public String index() {
@@ -41,9 +62,120 @@ public class UserController {
 		return "pages/contact-us.html";
 	}
 
-	// contact
+	// signup
 	@GetMapping("/signup")
 	public String signup() {
 		return "pages/sign-up.html";
 	}
+	
+
+	// 초기화면 설정
+	@RequestMapping(value = "board")
+	public ModelAndView login(LoginVO loginDTO, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
+		HttpSession session = request.getSession();
+		ModelAndView mav = new ModelAndView();
+		Map<String, String> map = new HashMap();
+		map.put("mbId", loginDTO.getId());
+		map.put("mbPw", loginDTO.getPw());
+		int dupleCheck = userService.mbDuplicationCheck(map);
+		LoginDomain loginDomain = userService.mbGetId(map);
+		if (dupleCheck == 0) {
+			String alertText = "없는 아이디이거나 패스워드가 잘못되었습니다. 가입해주세요";
+			String redirectPath = "/signin";
+			CommonUtils.redirect(alertText, redirectPath, response);
+			return mav;
+		}
+//
+//		String IP = CommonUtils.getClientIP(request);
+//		session.setAttribute("ip", IP);
+//		session.setAttribute("id", loginDomain.getMbId());
+//		session.setAttribute("pw", loginDomain.getMbPw());
+//		session.setAttribute("mbLevel", loginDomain.getMbLevel());
+//		session.setAttribute("mac", getLocalMacAddress());
+		mav.setViewName("index.html");
+		return mav;
+	};
+	// 회원가입 GET
+		@RequestMapping(value = "sign", method = RequestMethod.GET)
+		public void sign() {
+			System.out.println("가입하기 GET");
+		}
+
+		// 회원가입 POST
+		@RequestMapping(value = "sign", method = RequestMethod.POST)
+		public ModelAndView sign(LoginDomain loginDomain, HttpServletResponse response, HttpServletRequest request,
+				AlertUtils alert) throws IOException {
+			ModelAndView mav = new ModelAndView();
+			System.out.println("가입하기 POST");
+			loginDomain.setMbId(request.getParameter("id"));
+			loginDomain.setMbPw(request.getParameter("pw"));
+			loginDomain.setMbName(request.getParameter("name"));
+			loginDomain.setMbIp(CommonUtils.getClientIP(request));
+			loginDomain.setMbLevel(1);
+			loginDomain.setMbUse("Y");
+			if (check(request) == 1) {
+				System.out.println(check(request));
+				mav.addObject("data", new AlertUtils("아이디가 중복되었습니다.", "signin"));
+				mav.setViewName("alert/alert");
+				return mav;
+			}
+			userService.mbCreate(loginDomain);
+			mav.addObject("data", new AlertUtils("회원가입이 완료되었습니다.", "/main"));
+			System.out.println("가입 완료");
+			mav.setViewName("alert/alert");
+			return mav;
+		}
+
+		// 멤버관리에서 만들기 GET
+		@RequestMapping(value = "create", method = RequestMethod.GET)
+		public void create() {
+			System.out.println("가입하기 GET");
+		}
+
+		// 멤버관리에서 만들기 POST
+		@RequestMapping(value = "create", method = RequestMethod.POST)
+		public ModelAndView create(LoginDomain loginDomain, HttpServletResponse response, HttpServletRequest request,
+				AlertUtils alert) throws IOException {
+			ModelAndView mav = new ModelAndView();
+			System.out.println("가입하기 POST");
+			loginDomain.setMbId(request.getParameter("id"));
+			loginDomain.setMbPw(request.getParameter("pw"));
+			loginDomain.setMbIp(CommonUtils.getClientIP(request));
+			loginDomain.setMbLevel(1);
+			loginDomain.setMbUse("Y");
+			if (check(request) == 1) {
+				System.out.println(check(request));
+				mav.addObject("data", new AlertUtils("아이디가 중복되었습니다.", "adList"));
+				mav.setViewName("alert/alert");
+				return mav;
+			}
+			userService.mbCreate(loginDomain);
+			mav.addObject("data", new AlertUtils("멤버 추가가 완료되었습니다.", "adList"));
+			System.out.println("가입 완료");
+			mav.setViewName("alert/alert");
+			return mav;
+		}
+
+		// 아이디 중복확인
+		@ResponseBody
+		@RequestMapping(value = "check")
+		public int check(HttpServletRequest request) {
+			String id = request.getParameter("id");
+			System.out.println(id);
+			// 중복체크
+			Map<String, String> map = new HashMap();
+			map.put("mbId", id);
+			int i = userService.mbDuplicationCheck(map);
+			return i;
+		}
+
+		// 로그아웃
+		@RequestMapping(value = "/logout", method = RequestMethod.GET)
+		public String logout(HttpServletRequest request) throws Exception {
+			System.out.println("로그아웃");
+			HttpSession session = request.getSession();
+			session.invalidate();
+			return "redirect:/";
+		}
 }

@@ -1,43 +1,39 @@
-package com.co.kr.mapper;
+package com.co.kr.service;
 
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Mapper;
-
 import com.co.kr.domain.LoginDomain;
 
-@Mapper
-public interface UserMapper {
-	
-	//하나 리스트 조회
+
+public interface UserService {
+	  // selectId
     public LoginDomain mbSelectList(Map<String, String> map);
     
-    //전체 리스트 조회
+    // selectAll
     public List<LoginDomain> mbAllList(Map<String, Integer> map);
     
-    // 전체갯수
+    // selectAll Conut
     public int mbGetAll();
-
-    //신규 저장
+    
+    //신규
     public void mbCreate(LoginDomain loginDomain);
     
-    //id 정보 가져오기
+    //getMbIdCheck
     public LoginDomain mbGetId(Map<String, String> map);
     
-    //중복체크
+    //mbDuplicationCheck
     public int mbDuplicationCheck(Map<String, String> map);
     
-    //업데이트
-    public void mbUpdate(LoginDomain loginDomain);
+    //update
+    public void mbUpdate(LoginDomain loginDomain); 
     
-    //삭제
-    public void mbRemove(Map<String, String> map);
+    //delete 
+    public void mbRemove(Map<String, String> map); 
     
     //등급 업데이트하기
     public void mbLevelUpdate(LoginDomain loginDomain);
     
-    //아이디로 검색하기
+    //멤버 id로 찾기
     public List<LoginDomain> searchMemberById(Map<String, String> map);
 }
-
