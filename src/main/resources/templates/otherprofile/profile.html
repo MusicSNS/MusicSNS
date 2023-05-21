@@ -1,0 +1,59 @@
+<div class="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6 mb-2">
+	<!-- START Testimonials w/ user image & text & info -->
+	<section
+		class="py-sm-5 py-0 position-relative justify-content-between align-items-center">
+		<div class="container justify-content-between align-items-center">
+			<div class="d-flex justify-content-center align-items-center mb-0">
+				<div class="mt-n8 mt-md-n9 text-center">
+					<div th:if="${profile}">
+						<img class="avatar avatar-xxl shadow-x1 z-index-2" th:src="${profile}">
+					</div>
+					<div th:unless="${profile}">
+						<img
+							class="avatar avatar-xxl shadow-xl position-relative z-index-2"
+							src="img/default.jpg" alt="bruce" loading="lazy">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div
+					class="justify-content-center align-items-center text-center mb-2">
+					<div
+						class="card-body d-flex align-items-center justify-content-center">
+						<div class="row mb-4 justify-content-between text-center mb-0">
+							<h3 class="mb-3 mt-4">
+								<span th:text="${othername}"></span>
+							</h3>
+							<div class="card">
+								<div class="card-body">
+									<div class="row align-items-center justify-content-center">
+										<div class="col-auto">
+											<span class="h6" th:text="${itemSize}"></span> <span>게시물</span>
+										</div>
+										<div class="col-auto">
+											<span class="h6">3.5k</span> <span>팔로워</span>
+										</div>
+										<div class="col-auto">
+											<span class="h6">260</span> <span>팔로우</span>
+										</div>
+										<div class="d-block mt-4">
+											<a th:href="@{profileEdit(mbSeq = ${mbSeq})}" th:if="${othername == session.name}">
+												<button class="btn btn-sm btn-outline-secondary mb-0">프로필
+													수정</button>
+											</a>
+											<button type="button"
+												class="btn btn-sm btn-outline-info text-nowrap mb-0">Follow</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<p class="text-center mb-0">
+						<span th:text="${comment}"></span>
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>

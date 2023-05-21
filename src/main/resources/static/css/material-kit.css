@@ -20212,13 +20212,13 @@ fieldset:disabled .btn {
   justify-content: center;
   font-size: 1rem;
   border-radius: 50rem;
-  height: 48px;
-  width: 48px;
+  height: 200px;
+  width: 200px;
   transition: all .2s ease-in-out;
 }
 
 .avatar img {
-  width: 100%;
+  width: 200%;
 }
 
 .avatar+.avatar-content {
@@ -20239,8 +20239,8 @@ fieldset:disabled .btn {
 }
 
 .avatar-xxl {
-  width: 110px !important;
-  height: 110px !important;
+  width: 190px !important;
+  height: 190px !important;
 }
 
 .avatar-xxl.avatar-raised {

@@ -12,6 +12,7 @@ public class LoginDomain {
 	private String mbId;
 	private String mbPw;
 	private String mbName;
+	private String mbComment;
 	private Integer mbLevel;
 	private String mbIp;
 	private String mbUse;

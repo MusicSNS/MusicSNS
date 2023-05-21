@@ -1,0 +1,34 @@
+<section>
+	<div class="container py-4">
+		<div class="row">
+			<div
+				class="col-lg-7 mx-auto d-flex justify-content-center flex-column">
+				<h3 class="text-center">Create Board</h3>
+				<form role="form" action="upload"  method="post" enctype="multipart/form-data">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="input-group input-group-outline mb-4">
+									<input class="form-control" id="title" name="title" type="text" placeholder="제목" required>
+								</div>
+							</div>
+						</div>
+						<div class="input-group input-group-outline mb-4 input-group-static">
+							<textarea name="content" class="form-control" id="story"
+								placeholder="내용" rows="4" required></textarea>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<button type="button"
+									class="btn btn-light text-dark w-auto me-2">
+									<td><input type="file" id="file" name="files" multiple /></td>
+									</button>
+								<button type="submit" class="btn btn-light text-dark w-auto me-2 w-100">업로드</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</section>

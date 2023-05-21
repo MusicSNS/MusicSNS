@@ -1,0 +1,69 @@
+<section class="py-lg-1">
+	<form role="form" action="bcupload" method="post"
+		enctype="multipart/form-data">
+		<div class="section form">
+			<table>
+				<tbody>
+					<tr>
+						<td><input type="hidden" id="bdSeq" name="bdSeq"
+							placeholder="글번호" th:value="${detail.bdSeq}" required />
+							<div class="input-group input-group-lg input-group-outline my-3">
+								<textarea class="form-control form-control-lg" colspan="2"
+									id="content" name="content" placeholder="댓글을 적어주세요." rows="5"
+									cols="200" required></textarea>
+							</div></td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="button" style="display: flex; justify-content: flex-end;">
+				<button type="submit"
+					style="margin-right: 11px; white-space: nowrap;"
+					class="btn btn-outline-primary">댓글 달기</button>
+			</div>
+		</div>
+	</form>
+	<div class="card">
+		<div class="table-responsive">
+			<table class="table align-items-center mb-0">
+				<th:block th:if="${comment}">
+					<colgroup>
+						<col style="width: 45%" />
+						<col style="width: 10%" />
+						<col style="width: 15%" />
+						<col style="width: 15%" />
+						<col style="width: 10%" />
+					</colgroup>
+					<thead>
+						<tr>
+							<th class="text-center">댓글</th>
+							<th class="text-center">닉네임</th>
+							<th class="text-center">등록일</th>
+							<th class="text-center">수정일</th>
+							<th class="text-center">수정/삭제</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="bcitem : ${comment}">
+							<td class="text-center" th:text="${bcitem.bcContent}"></td>
+							<td class="text-center"><a
+								th:href="@{profile(mbName=${bcitem.mbName})}"> <span
+									th:text="${bcitem.mbName}"></span>
+							</a></td>
+							<td class="text-center" th:text="${bcitem.bcCreateAt}"></td>
+							<td class="text-center" th:text="${bcitem.bcUpdateAt}"></td>
+							<td class="text-center" th:if="${bcitem.mbId == session.id}">
+								<a
+								th:href="@{/bcedit(bcSeq = ${bcitem.bcSeq}, bdSeq = ${bcitem.bdSeq})}">
+									<button class="btn btn-outline-dark">수정</button>
+							</a> <a
+								th:href="@{/bcremove(bcSeq=${bcitem.bcSeq}, bdSeq=${bcitem.bdSeq})}">
+									<button class="btn btn-outline-dark">삭제</button>
+							</a>
+							</td>
+						</tr>
+					</tbody>
+				</th:block>
+			</table>
+		</div>
+	</div>
+</section>

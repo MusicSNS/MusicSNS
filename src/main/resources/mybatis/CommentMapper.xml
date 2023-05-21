@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.co.kr.mapper.CommentMapper">
+
+	<!-- comment 리스트 -->
+	<select id="commentList" parameterType="hashMap"
+		resultType="com.co.kr.domain.CommentListDomain">
+		SELECT * FROM musicsns.comment where bd_seq=#{bdSeq} order by bc_update_at desc
+	</select>
+
+	<!-- comment 생성 -->
+	<insert id="commentUpload"
+		parameterType="com.co.kr.domain.CommentContentDomain"
+		useGeneratedKeys="true" keyProperty="bdSeq" keyColumn="bd_seq">
+
+		INSERT INTO
+		musicsns.comment ( bc_seq, bd_seq, mb_id, mb_name, bc_content )
+		VALUES
+		( #{bcSeq}, #{bdSeq}, #{mbId}, #{mbName}, #{bcContent} )
+	</insert>
+	<update id="commentUpdate"
+		parameterType="com.co.kr.domain.CommentContentDomain">
+		UPDATE musicsns.comment SET
+		bc_seq=#{bcSeq},
+		bd_seq=#{bdSeq}, mb_id=#{mbId},
+		mb_name=#{mbName},
+		bc_content=#{bcContent},
+		bc_update_at=now() WHERE bc_seq=#{bcSeq}
+	</update>
+	<delete id="commentRemove" parameterType="hashMap">
+		DELETE FROM
+		musicsns.comment WHERE bc_seq=#{bcSeq}
+	</delete>
+	<delete id="commentAllRemove" parameterType="hashMap">
+		DELETE FROM
+		musicsns.comment where bd_seq=#{bdSeq}
+	</delete>
+	<select id="commentSelectOne"
+		resultType="com.co.kr.domain.CommentListDomain" parameterType="map">
+		SELECT *
+		FROM musicsns.comment where bc_seq = #{bcSeq}
+	</select>
+</mapper>

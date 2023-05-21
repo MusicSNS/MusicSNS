@@ -71,6 +71,7 @@
 		UPDATE musicsns.member SET
 		mb_pw=#{mbPw},
 		mb_name=#{mbName},
+		mb_comment=#{mbComment},
 		mb_level=#{mbLevel},
 		mb_ip=#{mbIp},
 		mb_use=#{mbUse},
