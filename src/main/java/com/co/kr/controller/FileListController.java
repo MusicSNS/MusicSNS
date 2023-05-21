@@ -13,6 +13,7 @@ import com.co.kr.util.CommonUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import com.co.kr.vo.FileListVO;
+import com.co.kr.vo.LoginVO;
 
 import java.text.ParseException;
 import java.util.List;
@@ -28,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.co.kr.domain.BoardFileDomain;
 import com.co.kr.domain.BoardListDomain;
 import com.co.kr.domain.CommentListDomain;
+import com.co.kr.domain.LoginDomain;
 import com.co.kr.domain.UserFileDomain;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,15 +48,18 @@ public class FileListController {
 
 	@Autowired
 	private ProfileService profileService;
-	
+
 	@RequestMapping(value = "detail", method = RequestMethod.GET)
 	public ModelAndView bdSelectOneCall(@ModelAttribute("fileListVO") FileListVO fileListVO,
 			@RequestParam("bdSeq") String bdSeq, HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView();
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		HttpSession session = request.getSession();
-
+		int likecount = uploadService.selectlike(map);
+		System.out.println("bdSeq : "+bdSeq);
+		
 		map.put("bdSeq", Integer.parseInt(bdSeq));
+		map.put("mbId", session.getAttribute("id"));
 		BoardListDomain boardListDomain = uploadService.boardSelectOne(map);
 		List<BoardFileDomain> fileList = uploadService.boardSelectOneFile(map);
 		List<CommentListDomain> commentListDomain = commentService.commentList(map);
@@ -63,6 +68,16 @@ public class FileListController {
 			String path = list.getUpFilePath().replaceAll("\\\\", "/");
 			list.setUpFilePath(path);
 		}
+		
+		String statlike = uploadService.selectstatus(map);
+		System.out.println("status : "+statlike);
+		if (statlike == null) {
+			mav.addObject("like", "like!");
+		}
+		else {
+			mav.addObject("like", "unlike!");
+		}
+		
 		mav.addObject("comment", commentListDomain);
 		mav.addObject("detail", boardListDomain);
 		mav.addObject("files", fileList);
@@ -87,7 +102,7 @@ public class FileListController {
 		mav.setViewName("pages/board.html");
 		return mav;
 	}
-	
+
 	@RequestMapping(value = "/remove", method = RequestMethod.GET)
 	public ModelAndView remove(BoardFileDomain boardFileDomain, String bdSeq, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -97,6 +112,7 @@ public class FileListController {
 
 		map.put("bdSeq", Integer.parseInt(bdSeq));
 		uploadService.bdContentRemove(map);
+		uploadService.deletelike(map);
 
 		boardFileDomain.setBdSeq(Integer.parseInt(bdSeq));
 		System.out.println(bdSeq + "번째 게시글 사진 삭제");
@@ -247,9 +263,8 @@ public class FileListController {
 		CommonUtils.redirect("댓글이 삭제되었습니다.", redirectPath, response);
 		return mav;
 	}
-	
 
-	@RequestMapping(value="/profileEdit")
+	@RequestMapping(value = "/profileEdit")
 	public ModelAndView profileEdit(FileListVO fileListVO, HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView();
 		HttpSession session = request.getSession();
@@ -270,21 +285,21 @@ public class FileListController {
 		}
 		UserFileDomain profile = profileService.mbSelectOneFile(mb);
 		if (profile != null) {
-		    String profilePath = profile.getUpNewFileName().replace("\\\\", "/");
-		    profile.setUpFilePath(profilePath);
-		    mav.addObject("profile", profile.getUpFilePath());
+			String profilePath = profile.getUpNewFileName().replace("\\\\", "/");
+			profile.setUpFilePath(profilePath);
+			mav.addObject("profile", profile.getUpFilePath());
 		} else {
-		    System.out.println("NULL");
+			System.out.println("NULL");
 		}
 		fileListVO.setMcontent(session.getAttribute("comment").toString());
 		fileListVO.setMname(session.getAttribute("name").toString());
 		mav.addObject("items", items);
-		mav.addObject("itemSize",size);
+		mav.addObject("itemSize", size);
 		mav.addObject("mbSeq", session.getAttribute("mbSeq"));
 		mav.setViewName("profile/authorEdit.html");
 		return mav;
 	}
-	
+
 	@RequestMapping(value = "profileEditSave", method = RequestMethod.POST)
 	public ModelAndView profileEditSave(UserFileDomain userFileDomain, FileListVO fileListVO,
 			MultipartHttpServletRequest request, HttpServletRequest httpReq, HttpServletResponse response)
@@ -297,7 +312,7 @@ public class FileListController {
 		fileListVO.setMcontent(httpReq.getParameter("mcontent"));
 		session.setAttribute("files", httpReq.getParameter("file"));
 		fileListVO.setIsEdit("Y");
-		String mbName= profileService.fileProcess(fileListVO, request, httpReq, response);
+		String mbName = profileService.fileProcess(fileListVO, request, httpReq, response);
 		System.out.println(mbName + "님의 프로필을 업데이트 하였습니다.");
 		session.setAttribute("comment", httpReq.getParameter("mcontent"));
 		List<BoardListDomain> items = uploadService.boardList();
@@ -315,12 +330,12 @@ public class FileListController {
 			}
 			item.setFiles(fileList);
 		}
-		HashMap<String, String>param = new HashMap<String, String>();
+		HashMap<String, String> param = new HashMap<String, String>();
 		param.put("oldName", session.getAttribute("name").toString());
 		session.setAttribute("name", httpReq.getParameter("mname"));
 		param.put("newName", session.getAttribute("name").toString());
 		mav.addObject("items", items);
-		mav.addObject("itemSize",size);
+		mav.addObject("itemSize", size);
 		userFileDomain.setMbId(session.getAttribute("id").toString());
 		profileService.mbFileRemove(userFileDomain);
 		mav.setViewName("profile/author");
@@ -328,5 +343,33 @@ public class FileListController {
 		CommonUtils.redirect("프로필이 변경되었습니다.", redirectPath, response);
 		profileService.changeName(param);
 		return mav;
+	}
+
+	@RequestMapping(value = "like")
+	public void like(FileListVO fileListVO, LoginVO loginVO, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
+		HashMap<String, Object> map = new HashMap<>();
+
+		HttpSession session = request.getSession();
+		String bdSeq = fileListVO.getSeq();
+		String mbId = session.getAttribute("id").toString();
+		map.put("bdSeq", bdSeq);
+		map.put("mbId", mbId);
+		Integer duplecheck = uploadService.duplicatelike(map);
+		bdSelectOneCall(fileListVO, bdSeq, request);
+		if (duplecheck == 0) {
+			uploadService.insertlike(map);
+			map.put("status", "unlike!");
+			uploadService.updatelike(map);
+			String redirectPath = "detail" + "?bdSeq=" + bdSeq;
+			CommonUtils.redirect("마음에 들었군요!", redirectPath, response);
+		} else {
+			uploadService.deletelikeone(map);
+			map.put("status", "like!");
+			uploadService.updatelike(map);
+			String redirectPath = "detail" + "?bdSeq=" + bdSeq;
+			CommonUtils.redirect("마음에 들지 않으셧나요?", redirectPath, response);
+		}
+
 	}
 }

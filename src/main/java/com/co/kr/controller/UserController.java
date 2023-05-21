@@ -172,7 +172,7 @@ public class UserController {
 			CommonUtils.redirect(alertText, redirectPath, response);
 			return mav;
 		}
-
+		
 		String IP = CommonUtils.getClientIP(request);
 		session.setAttribute("ip", IP);
 		session.setAttribute("mbSeq",loginDomain.getMbSeq());
@@ -243,12 +243,18 @@ public class UserController {
 
 	@RequestMapping(value = "bdList")
 	public ModelAndView bdList(HttpServletRequest request) {
+		HttpSession session = request.getSession();
 		ModelAndView mav = new ModelAndView();
-		List<BoardListDomain> items = uploadService.boardList();
+		
+		HashMap<String, Object> like = new HashMap<String, Object>();
+		like.put("mbId", session.getAttribute("id"));
+		
+ 		List<BoardListDomain> items = uploadService.boardList();
 		System.out.println("items ==> " + items);
 		for (BoardListDomain item : items) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("bdSeq", Integer.parseInt(item.getBdSeq()));
+			like.put("bdSeq", Integer.parseInt(item.getBdSeq()));
 			List<BoardFileDomain> fileList = uploadService.boardSelectOneFile(map);
 			List<CommentListDomain> commentList = commentService.commentList(map);
 			for (BoardFileDomain list : fileList) {
@@ -257,7 +263,17 @@ public class UserController {
 			}
 			item.setComment(commentList);
 			item.setFiles(fileList);
+			
+			String statlike = uploadService.selectstatus(like);
+			System.out.println("status : "+statlike);
+			if (statlike == null) {
+				item.setLike("like!");
+			}
+			else {
+				item.setLike("unlike!");
+			}
 		}
+		
 		mav.addObject("items", items);
 		mav.setViewName("pages/board.html");
 		return mav;

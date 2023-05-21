@@ -8,7 +8,7 @@
 		resultType="com.co.kr.domain.BoardListDomain">
 		SELECT bd_seq, mb_id, mb_name, bd_title, bd_content,
 		bd_create_at,
-		bd_update_at, files, comment
+		bd_update_at, files, comment, `like`
 		FROM musicsns.board order by
 		bd_update_at desc
 	</select>
@@ -102,7 +102,7 @@
 		resultType="com.co.kr.domain.BoardListDomain" parameterType="map">
 		SELECT
 		bd_seq, mb_id, mb_name, bd_title, bd_content, bd_create_at,
-		bd_update_at, files, comment
+		bd_update_at, files, comment, `like`
 		FROM
 		musicsns.board where bd_seq = #{bdSeq}
 	</select>
@@ -120,14 +120,59 @@
 
 	<!-- count member board -->
 	<select id="authorBoard" resultType="int" parameterType="map">
-		SELECT COUNT(*) FROM musicsns.board WHERE mb_name = #{mbName}
+		SELECT
+		COUNT(*) FROM musicsns.board WHERE mb_name = #{mbName}
 	</select>
-	
-	<select id="authorBoardList" resultType="com.co.kr.domain.BoardListDomain" parameterType="map">
-		SELECT bd_seq, mb_id, mb_name, bd_title, bd_content,
+
+	<select id="authorBoardList"
+		resultType="com.co.kr.domain.BoardListDomain" parameterType="map">
+		SELECT
+		bd_seq, mb_id, mb_name, bd_title, bd_content,
 		bd_create_at,
-		bd_update_at, files, comment
+		bd_update_at, files, comment, `like`
 		FROM musicsns.board where mb_name =
 		#{mbName}
+	</select>
+
+	<select id="selectlike" parameterType="hashMap"
+		resultType="java.lang.Integer">
+		SELECT count(DISTINCT bd_seq, mb_id) FROM musicsns.like
+		WHERE bd_seq = #{bdSeq}
+	</select>
+	<!--게시글 삭제했을 때 메모리 차지 안하게끔 삭제하게 해주도록 하기 위함 -->
+	<delete id="deletelike" parameterType="hashMap">
+		DELETE FROM musicsns.like
+		WHERE bd_seq = #{bdSeq}
+	</delete>
+	<delete id="deletelikeuser" parameterType="hashMap">
+		DELETE FROM
+		musicsns.like WHERE mb_id = #{mbId}
+	</delete>
+
+	<!-- 중복으로 좋아요를 누를 때, mbId로 count해서 사용자가 좋아요를 눌럿는지 확인하기 위함 -->
+	<select id="duplicatelike" parameterType="hashMap"
+		resultType="java.lang.Integer">
+		SELECT count(bd_seq) FROM musicsns.like WHERE mb_id =
+		#{mbId} AND bd_seq = #{bdSeq}
+	</select>
+	<!-- 중복일 때 좋아요 삭제 -->
+	<delete id="deletelikeone" parameterType="hashMap">
+		DELETE FROM
+		musicsns.like WHERE bd_seq = #{bdSeq} AND mb_id = #{mbId}
+	</delete>
+	<!-- 중복이 아니라면 추가 -->
+	<insert id="insertlike" parameterType="hashMap">
+		INSERT INTO musicsns.like
+		(bd_seq, mb_id, status) VALUES (#{bdSeq}, #{mbId}, 'like!')
+	</insert>
+	<!-- status 관리 -->
+	<update id="updatelike" parameterType="hashMap">
+		UPDATE musicsns.like
+		SET status = #{status}
+		WHERE bd_seq = #{bdSeq}
+		AND mb_id = #{mbId}
+	</update>
+	<select id="selectstatus" resultType="java.lang.String" parameterType="hashMap">
+		SELECT status FROM musicsns.like WHERE bd_seq = #{bdSeq} AND mb_id = #{mbId}
 	</select>
 </mapper>

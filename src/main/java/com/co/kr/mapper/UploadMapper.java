@@ -52,4 +52,21 @@ public interface UploadMapper {
 	
 	//select mbName board
 	public List<BoardListDomain> authorBoardList(HashMap<String, Object> map);
+	
+	//like
+	public void insertlike(HashMap<String, Object> map);
+	
+	public int selectlike(HashMap<String, Object> map);
+	
+	public void deletelike(HashMap<String, Object> map);
+	
+	public void deletelikeuser(HashMap<String, Object> map);
+	
+	public int duplicatelike(HashMap<String, Object> map);
+	
+	public void deletelikeone(HashMap<String, Object> map);
+	
+	public void updatelike(HashMap<String, Object> map);
+	
+	public String selectstatus(HashMap<String, Object> map);
 }

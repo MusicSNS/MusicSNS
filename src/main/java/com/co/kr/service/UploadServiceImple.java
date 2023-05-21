@@ -48,17 +48,18 @@ public class UploadServiceImple implements UploadService {
 	}
 
 	@Override
-	public int fileProcess(FileListVO fileListVO, MultipartHttpServletRequest request, HttpServletRequest httpReq, HttpServletResponse response) throws IOException {
+	public int fileProcess(FileListVO fileListVO, MultipartHttpServletRequest request, HttpServletRequest httpReq,
+			HttpServletResponse response) throws IOException {
 		// session 생성
 		HttpSession session = httpReq.getSession();
 
 		// content domain 생성
 		BoardContentDomain boardContentDomain = BoardContentDomain.builder().mbId(session.getAttribute("id").toString())
-				.mbName(fileListVO.getName())
-				.bdTitle(fileListVO.getTitle()).bdContent(fileListVO.getContent()).bdSeq(fileListVO.getSeq())
-				.build();
-		System.out.println("boardContentDomain : "+boardContentDomain.getMbId()+" "+boardContentDomain.getMbName()+" "+boardContentDomain.getBdSeq()+" "
-				+boardContentDomain.getBdTitle()+" "+boardContentDomain.getBdContent());
+				.mbName(fileListVO.getName()).bdTitle(fileListVO.getTitle()).bdContent(fileListVO.getContent())
+				.bdSeq(fileListVO.getSeq()).build();
+		System.out.println("boardContentDomain : " + boardContentDomain.getMbId() + " " + boardContentDomain.getMbName()
+				+ " " + boardContentDomain.getBdSeq() + " " + boardContentDomain.getBdTitle() + " "
+				+ boardContentDomain.getBdContent());
 		if (fileListVO.getIsEdit() != null) {
 			boardContentDomain.setBdSeq(fileListVO.getSeq());
 			System.out.println("수정업데이트");
@@ -127,9 +128,9 @@ public class UploadServiceImple implements UploadService {
 		// folder chcek
 		if (!pathCheck.exists())
 			pathCheck.mkdirs();
-		
+
 		if (multipartFiles.size() > 1) {
-			 CommonUtils.redirect("파일은 하나만 선택 가능합니다.", "bdList", response);
+			CommonUtils.redirect("파일은 하나만 선택 가능합니다.", "bdList", response);
 		}
 		for (MultipartFile multipartFile : multipartFiles) {
 
@@ -240,17 +241,57 @@ public class UploadServiceImple implements UploadService {
 	}
 
 	@Override
-	public List<BoardListDomain>searchBoardByTitle(HashMap<String, String> map){
+	public List<BoardListDomain> searchBoardByTitle(HashMap<String, String> map) {
 		return uploadMapper.searchBoardByTitle(map);
 	}
-	
+
 	@Override
 	public int authorBoard(HashMap<String, Object> map) {
 		return uploadMapper.authorBoard(map);
 	}
+
+	@Override
+	public List<BoardListDomain> authorBoardList(HashMap<String, Object> map) {
+		return uploadMapper.authorBoardList(map);
+	}
+
+	@Override
+	public void insertlike(HashMap<String, Object> map) {
+		uploadMapper.insertlike(map);
+	};
 	
 	@Override
-	public List<BoardListDomain> authorBoardList(HashMap<String, Object> map){
-		return uploadMapper.authorBoardList(map);
+	public int selectlike(HashMap<String, Object> map) {
+		return uploadMapper.selectlike(map);
+	};
+
+	@Override
+	public void deletelike(HashMap<String, Object> map) {
+		uploadMapper.deletelike(map);
+	};
+
+	@Override
+	public void deletelikeuser(HashMap<String, Object> map) {
+		uploadMapper.deletelikeuser(map);
+	};
+	
+	@Override
+	public int duplicatelike(HashMap<String, Object> map) {
+		return uploadMapper.duplicatelike(map);
+	}
+	
+	@Override
+	public void deletelikeone(HashMap<String, Object>map) {
+		uploadMapper.deletelikeone(map);
+	}
+	
+	@Override
+	public void updatelike(HashMap<String, Object> map) {
+		uploadMapper.updatelike(map);
+	}
+	
+	@Override
+	public String selectstatus(HashMap<String, Object> map) {
+		return uploadMapper.selectstatus(map);
 	}
 }

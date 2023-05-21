@@ -21,4 +21,5 @@ public class BoardListDomain {
 	private String bdUpdateAt;
 	private List<BoardFileDomain> files;
 	private List<CommentListDomain> comment;
+	private String like;
 }
