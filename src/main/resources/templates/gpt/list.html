@@ -1,0 +1,7 @@
+<div class="container" th:if="${recommendresult}">
+	<div class="card card-frame">
+		<div class="card-body">
+			<p th:utext="${recommendresult.replaceAll('\n','<br>')}"></p>
+		</div>
+	</div>
+</div>

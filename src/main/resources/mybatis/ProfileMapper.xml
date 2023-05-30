@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.co.kr.mapper.ProfileMapper">
+	<!-- file -->
+	<select id="mbSelectOneFile"
+		resultType="com.co.kr.domain.UserFileDomain" parameterType="map">
+		SELECT
+		mb_seq, mb_id, mb_name, up_original_file_name, up_new_file_name,
+		up_file_path,
+		up_file_size
+		FROM musicsns.view_member where mb_name =
+		#{mbName}
+	</select>
+	<insert id="mbFileUpload"
+		parameterType="com.co.kr.domain.UserFileDomain">
+		INSERT INTO musicsns.mbfiles (
+		mb_seq,
+		mb_id,
+		mb_name,
+		up_original_file_name,
+		up_new_file_name,
+		up_file_path,
+		up_file_size
+		)
+		VALUES (
+		#{mbSeq},
+		#{mbId},
+		#{mbName},
+		#{upOriginalFileName},
+		#{upNewFileName},
+		#{upFilePath},
+		#{upFileSize}
+		)
+	</insert>
+
+	<update id="mbFileUpdate"
+		parameterType="com.co.kr.domain.UserFileDomain">
+		UPDATE musicsns.mbfiles
+		SET
+		mb_id='${mbId}',
+		mb_name='${mbName}',
+		up_original_file_name='${upOriginalFileName}',
+		up_new_file_name='${upNewFileName}',
+		up_file_path='${upFilePath}',
+		up_file_size=${upFileSize}
+		WHERE mb_seq=${mbSeq}
+	</update>
+
+	<update id="mbFileUpdateCheck"
+		parameterType="com.co.kr.domain.UserFileDomain"
+		statementType="PREPARED">
+    <![CDATA[
+    UPDATE musicsns.mbfiles
+    SET
+        mb_id='${mbId}',
+        mb_name='${mbName}',
+        up_original_file_name='${upOriginalFileName}',
+        up_new_file_name='${upNewFileName}',
+        up_file_path='${upFilePath}',
+        up_file_size=${upFileSize}
+    WHERE mb_seq=${mbSeq}
+    ]]>
+	</update>
+
+	<delete id="mbFileRemove"
+		parameterType="com.co.kr.domain.UserFileDomain">
+		DELETE FROM musicsns.mbfiles WHERE mb_seq = #{mbSeq}
+	</delete>
+	<update id="mbContentUpdate"
+		parameterType="com.co.kr.domain.UserContentDomain">
+		UPDATE musicsns.member SET
+		mb_name=#{mbName},
+		mb_comment=#{mbContent}
+		WHERE mb_id=#{mbId}
+	</update>
+	<update id="mbContentRemove"
+		parameterType="com.co.kr.domain.UserContentDomain">
+		UPDATE musicsns.member SET mb_content = NULL
+	</update>
+	<select id="userSelectOne"
+		resultType="com.co.kr.domain.UserListDomain" parameterType="map">
+		SELECT *
+		FROM musicsns.member WHERE mb_seq=#{mbSeq}
+	</select>
+	<select id="userSelectName" resultType="java.lang.String"
+		parameterType="map">
+		SELECT mb_comment FROM musicsns.member WHERE
+		mb_name=#{mbName}
+	</select>
+	<update id="changeName" parameterType="map">
+		UPDATE musicsns.board
+		SET
+		mb_name = #{newName}
+		WHERE mb_name = #{oldName}
+	</update>
+	<insert id="follow" parameterType="map">
+		INSERT into musicsns.follow (mb_name, mb_id, mb_comment, fl_mb_name, fl_mb_id, fl_mb_comment) VALUES (#{mbName}, #{mbId}, #{mbComment}, #{flmbName}, #{flmbId}, #{flmbComment})
+	</insert>
+	<select id="selectfollow" parameterType="hashmap" resultType = "com.co.kr.domain.FollowListDomain">
+		SELECT * FROM musicsns.follow WHERE mb_name=#{mbName}
+	</select>
+	<select id="selectcountfollow" parameterType="map" resultType="java.lang.Integer">
+		SELECT count(*) FROM musicsns.follow WHERE mb_name=#{mbName}
+	</select>
+	<select id="selectfollowing" parameterType="hashmap" resultType="com.co.kr.domain.FollowListDomain">
+		SELECT * FROM musicsns.follow WHERE fl_mb_name=#{mbName}
+	</select>
+	<select id="selectcountfollowing" parameterType="map" resultType="java.lang.Integer">
+		SELECT count(*) FROM musicsns.follow WHERE fl_mb_name=#{mbName}
+	</select>
+	<select id="duplicatefollow" parameterType="hashMap" resultType="java.lang.Integer">
+		SELECT count(*) FROM musicsns.follow WHERE mb_name = #{mbName} AND fl_mb_name = #{flmbName}
+	</select>
+	<delete id="deletefollowone" parameterType="hashMap">
+		DELETE FROM musicsns.follow WHERE mb_name = #{mbName} AND fl_mb_name = #{flmbName}
+	</delete>
+</mapper>

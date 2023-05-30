@@ -1,0 +1,44 @@
+<section>
+	<div class="container py-4">
+		<div
+			class="col-lg-7 mx-auto d-flex justify-content-center flex-column">
+			<h3 class="text-center">Edit Board</h3>
+			<form role="form" th:object=${fileListVO} th:action="@{editSave}"
+				method="post" enctype="multipart/form-data">
+				<div class="card-bord">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="input-group input-group-outline mb-4">
+								<input type="hidden" th:field="*{seq}" /> <input type="hidden"
+									th:field="*{isEdit}" /> <input class="form-control"
+									th:field="*{title}" id="title" name="title" type="text"
+									placeholder="제목" required>
+							</div>
+						</div>
+					</div>
+					<div
+						class="input-group input-group-outline mb-4 input-group-static">
+						<textarea name="content" class="form-control" id="story"
+							th:field="*{content}" placeholder="내용" rows="4" required></textarea>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<button type="button" class="btn btn-light text-dark w-auto me-2">
+								<input type="file" id="file" name="files" multiple /> <span
+									style="color: #00a2be"
+									th:text="'*새로 파일첨부시 기존 파일은 삭제됩니다.(첨부된 사진 파일 : '+ ${fileLen} + '개)'"></span>
+							</button>
+							<button type="button" class="btn btn-light text-dark w-auto me-2">
+								<input type="file" id="file" name="music" multiple /> <span
+									style="color: #00a2be"
+									th:text="'*새로 파일첨부시 기존 파일은 삭제됩니다.(첨부된 음악 파일 : '+ ${musicfileLen} + '개)'"></span>
+							</button>
+							<button type="submit"
+								class="btn btn-light text-dark w-auto me-2 w-100">내용수정</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>

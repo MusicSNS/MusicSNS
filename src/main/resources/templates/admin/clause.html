@@ -1,0 +1,29 @@
+<!--clause.html-->
+
+<form role="form" action="adminsign" method="post">
+	<div class="card">
+  	<div class="table-responsive">
+    <table class="table align-items-center">
+        <tbody>
+            <tr>
+	           <div class="input-group input-group-outline my-3">
+                  <label class="form-label"></label>
+                  <input style="margin-left:25%; margin-right:25%" type="email" class="form-control" name="id" id="id" placeholder="Email" required>
+               </div>
+	           <div class="input-group input-group-outline mb-3">
+                 <label class="form-label"></label>
+                 <input style="margin-left:25%; margin-right:25%" type="text" class="form-control" name="name" id="name" placeholder="NickName" required>
+               </div>
+	           <div class="input-group input-group-outline mb-3">
+                 <label class="form-label"></label>
+                 <input style="margin-left:25%; margin-right:25%" type="password" class="form-control" name="pw" id="pw" placeholder="Password" size="30" required>
+               </div>       
+	             <input type="hidden" name="admin" value="admin" required/>
+	           <div class="button" style="display: flex; justify-content: flex-end; margin-right:25%">
+            	 <button type="submit" class="btn btn-sm  bg-gradient-primary  mb-0 me-1 mt-2 mt-md-0">멤버 추가</button>
+        	   </div>
+            </tr>
+        </tbody>
+       </table>
+    </div>
+</form>

@@ -1,0 +1,10 @@
+<div class="container">
+	<div class="section list">
+		<div class="section form" th:if="${detail}"
+			style="display: block; text-align: center;"></div>
+		<div class="section form" th:unless="${detail}"
+			style="display: block; text-align: center;"></div>
+		<th:block th:include="board/boarditem.html"></th:block>
+	</div>
+</div>
+<th:block th:include="board/boarddetail.html"></th:block>
