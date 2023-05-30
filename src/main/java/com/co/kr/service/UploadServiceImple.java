@@ -199,7 +199,7 @@ public class UploadServiceImple implements UploadService {
 		return bdSeq; // 저장된 게시판 번호
 	}
 
-	public int MusicfileProcess(FileListVO fileListVO, MultipartHttpServletRequest request, 
+	public void MusicfileProcess(FileListVO fileListVO, MultipartHttpServletRequest request, 
 			HttpServletRequest httpReq, HttpServletResponse response, Integer bdSeq) throws IOException {
 	    // session 생성
 	    HttpSession session = httpReq.getSession();
@@ -222,7 +222,6 @@ public class UploadServiceImple implements UploadService {
 	                    for (MusicFileDomain file : fileList) {
 	                        file.getMusicFilePath();
 	                        Path filePath = Paths.get(file.getMusicFilePath());
-
 	                        try {
 	                            // 파일 삭제
 	                            Files.deleteIfExists(filePath);
@@ -300,13 +299,13 @@ public class UploadServiceImple implements UploadService {
 
 	                    // 데이터베이스에 파일 업로드
 	                    musicMapper.musicFileUpload(musicFileDomain);
+	                    System.out.println("음악 업로드 완료!");
 	                } catch (IOException e) {
 	                    throw RequestException.fire(Code.E404, "잘못된 업로드 파일", HttpStatus.NOT_FOUND);
 	                }
 	            }
 	        }
 	    }
-	    return bdSeq; // 저장된 게시판 번호
 	}
 
 

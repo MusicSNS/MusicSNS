@@ -23,7 +23,7 @@ public interface UploadService {
 	public int fileProcess(FileListVO fileListVO, MultipartHttpServletRequest request, HttpServletRequest httpReq,
 			HttpServletResponse response) throws IOException;
 	
-	public int MusicfileProcess(FileListVO fileListVO, MultipartHttpServletRequest request, HttpServletRequest httpReq,
+	public void MusicfileProcess(FileListVO fileListVO, MultipartHttpServletRequest request, HttpServletRequest httpReq,
 			HttpServletResponse response, Integer bdSeq) throws IOException;
 
 	// all list
