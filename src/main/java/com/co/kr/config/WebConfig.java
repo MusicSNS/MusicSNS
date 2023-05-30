@@ -54,8 +54,8 @@ public class WebConfig implements WebMvcConfigurer {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-		registry.addResourceHandler("/resources/upload/**").addResourceLocations("file:///C:/upload/");
-		registry.addResourceHandler("/resources/profile/**").addResourceLocations("file:///C:/profile/");
-		registry.addResourceHandler("/resources/audio/**").addResourceLocations("file:///C:/audio/");
+		registry.addResourceHandler("/resources/upload/**").addResourceLocations("file:///app/C:/upload/");
+		registry.addResourceHandler("/resources/profile/**").addResourceLocations("file:///app/C:/profile/");
+		registry.addResourceHandler("/resources/audio/**").addResourceLocations("file:///app/C:/audio/");
 	}
 }
