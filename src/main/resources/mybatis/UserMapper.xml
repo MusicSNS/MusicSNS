@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.co.kr.mapper.UserMapper">
+
+	<!-- selectId -->
+	<select id="mbSelectList"
+		resultType="com.co.kr.domain.LoginDomain" parameterType="hashMap">
+		SELECT * FROM
+		musicsns.member WHERE mb_seq=#{mbSeq}
+	</select>
+	<!-- search id -->
+	<select id="searchMemberById" parameterType="map"
+		resultType="com.co.kr.domain.LoginDomain">
+		SELECT * FROM musicsns.member
+		WHERE mb_name LIKE CONCAT('%',
+		#{mbName}, '%')
+	</select>
+
+	<!-- create -->
+	<insert id="mbCreate"
+		parameterType="com.co.kr.domain.LoginDomain">
+		INSERT INTO musicsns.member(mb_id, mb_pw, mb_name,
+		mb_level,
+		mb_ip, mb_use,
+		mb_create_at, mb_update_at)
+		VALUES (#{mbId},
+		#{mbPw},
+		#{mbName}, #{mbLevel}, #{mbIp}, #{mbUse}, now(), now())
+	</insert>
+
+	<!-- mbGetAll -->
+	<select id="mbGetAll" resultType="int">
+		SELECT COUNT(*) FROM
+		musicsns.member
+	</select>
+
+	<!-- duplicationCheck -->
+	<select id="mbDuplicationCheck" resultType="int"
+		parameterType="hashMap">
+		SELECT COUNT(*) FROM musicsns.member WHERE
+		mb_id=#{mbId}
+		or mb_name=#{mbName}
+	</select>
+
+	<!-- duplicationCheck -->
+	<select id="mbLoginCheck" resultType="int"
+		parameterType="hashMap">
+		SELECT COUNT(*) FROM musicsns.member WHERE
+		mb_id=#{mbId}
+		and mb_pw=#{mbPw}
+	</select>
+
+	<!-- mbGetId -->
+	<select id="mbGetId" resultType="com.co.kr.domain.LoginDomain"
+		parameterType="hashMap">
+		SELECT * FROM musicsns.member WHERE mb_id=#{mbId}
+	</select>
+
+	<!-- update -->
+	<update id="mbUpdate"
+		parameterType="com.co.kr.domain.LoginDomain">
+		UPDATE musicsns.member SET
+		mb_pw=#{mbPw},
+		mb_name=#{mbName},
+		mb_comment=#{mbComment},
+		mb_level=#{mbLevel},
+		mb_ip=#{mbIp},
+		mb_use=#{mbUse},
+		mb_update_at=now()
+		WHERE mb_id=#{mbId}
+	</update>
+
+	<!-- delete -->
+	<delete id="mbRemove" parameterType="hashMap">
+		DELETE FROM
+		musicsns.member
+		WHERE mb_id=#{mbId}
+	</delete>
+
+	<update id="mbLevelUpdate"
+		parameterType="com.co.kr.domain.LoginDomain">
+		UPDATE musicsns.member SET
+		mb_update_at=now(),
+		mb_level=#{mbLevel}
+		WHERE mb_id=#{mbId}
+	</update>
+	
+	<!--Member List-->
+	<select id="mbAllList" resultType="com.co.kr.domain.LoginDomain">
+		SELECT * FROM musicsns.member order by mb_update_at desc
+	</select>
+
+	<update id="userboardedit" parameterType="hashMap">
+		UPDATE musicsns.board SET mb_name = #{newName} WHERE mb_name = #{oldName}
+	</update>
+	<update id="usercommentedit" parameterType="hashMap">
+		UPDATE musicsns.comment SET mb_name = #{newName} WHERE mb_name = #{oldName}
+	</update>
+	<update id="userfilesedit" parameterType="hashMap">
+		UPDATE musicsns.files SET mb_name = #{newName} WHERE mb_name = #{oldName}
+	</update>
+	<update id="usermbfilesedit" parameterType="hashMap">
+		UPDATE musicsns.mbfiles SET mb_name = #{newName} WHERE mb_name = #{oldName}
+	</update>
+	<update id="userlikeedit" parameterType="hashMap">
+		UPDATE musicsns.view_like SET mb_name = #{newName}, comment = #{newComment} WHERE mb_name = #{oldName}
+	</update>
+	<update id="userfollowedit" parameterType="hashMap">
+		UPDATE musicsns.follow SET mb_name = #{newName}, mb_comment = #{newComment} WHERE mb_name = #{oldName}
+	</update>
+	<update id="userfollowingedit" parameterType="hashMap">
+		UPDATE musicsns.follow SET fl_mb_name = #{newName}, fl_mb_comment = #{newComment} WHERE fl_mb_name = #{oldName}
+	</update>
+</mapper>

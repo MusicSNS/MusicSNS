@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.co.kr.mapper.UploadMapper">
+
+	<!--select all -->
+	<select id="boardList"
+		resultType="com.co.kr.domain.BoardListDomain">
+		SELECT bd_seq, mb_id, mb_name, bd_title, bd_content,
+		bd_create_at,
+		bd_update_at, files, comment, `like`, likecount
+		FROM musicsns.board order by
+		bd_update_at desc
+	</select>
+	<select id="searchBoardByTitle" parameterType="map"
+		resultType="com.co.kr.domain.BoardListDomain">
+		SELECT * FROM musicsns.board
+		WHERE bd_title LIKE CONCAT('%',
+		#{bdTitle}, '%') order by bd_update_at desc
+	</select>
+	<insert id="contentUpload"
+		parameterType="com.co.kr.domain.BoardContentDomain"
+		useGeneratedKeys="true" keyProperty="bdSeq" keyColumn="bd_seq">
+
+		INSERT INTO
+		musicsns.board (
+		mb_id,
+		mb_name,
+		bd_title,
+		bd_content
+		)
+		VALUES (
+		#{mbId},
+		#{mbName},
+		#{bdTitle},
+		#{bdContent}
+		)
+	</insert>
+
+	<insert id="fileUpload"
+		parameterType="com.co.kr.domain.BoardFileDomain">
+		INSERT INTO musicsns.files (
+		bd_seq,
+		mb_id,
+		mb_name,
+		up_original_file_name,
+		up_new_file_name,
+		up_file_path,
+		up_file_size
+		)
+		VALUES (
+		#{bdSeq},
+		#{mbId},
+		#{mbName},
+		#{upOriginalFileName},
+		#{upNewFileName},
+		#{upFilePath},
+		#{upFileSize}
+		)
+	</insert>
+	<update id="bdContentUpdate"
+		parameterType="com.co.kr.domain.BoardContentDomain">
+		UPDATE musicsns.board SET
+		bd_seq=#{bdSeq},
+		mb_id=#{mbId},
+		mb_name=#{mbName},
+		bd_title=#{bdTitle},
+		bd_content=#{bdContent},
+		bd_update_at=now()
+		WHERE bd_seq=#{bdSeq}
+	</update>
+	<update id="bdFileUpdate"
+		parameterType="com.co.kr.domain.BoardFileDomain">
+		UPDATE musicsns.files SET
+		bd_seq=#{bdSeq},
+		mb_id=#{mbId},
+		mb_name=#{mbName},
+		up_original_file_name=#{upOriginalFileName},
+		up_new_file_name=#{upNewFileName},
+		up_file_path=#{upFilePath},
+		up_file_size=#{upFileSize}
+		WHERE bd_seq=#{bdSeq}
+	</update>
+	<delete id="bdContentRemove" parameterType="hashMap">
+		DELETE FROM
+		musicsns.board WHERE bd_seq=#{bdSeq}
+	</delete>
+	<delete id="bdContentAllRemove" parameterType="hashMap">
+		DELETE FROM
+		musicsns.board where mb_id=#{mbId}
+	</delete>
+	<delete id="bdFileRemove"
+		parameterType="com.co.kr.domain.BoardFileDomain">
+		DELETE FROM musicsns.files WHERE bd_seq = #{bdSeq}
+	</delete>
+	<delete id="bdFileAllRemove" parameterType="hashMap">
+		DELETE FROM
+		musicsns.files WHERE mb_id = #{mbId}
+	</delete>
+	<!-- content -->
+	<select id="boardSelectOne"
+		resultType="com.co.kr.domain.BoardListDomain" parameterType="map">
+		SELECT
+		bd_seq, mb_id, mb_name, bd_title, bd_content, bd_create_at,
+		bd_update_at, files, comment, `like`, likecount
+		FROM
+		musicsns.board where bd_seq = #{bdSeq}
+	</select>
+
+	<!-- file -->
+	<select id="boardSelectOneFile"
+		resultType="com.co.kr.domain.BoardFileDomain" parameterType="map">
+		SELECT
+		bd_seq, mb_id, mb_name, up_original_file_name, up_new_file_name,
+		up_file_path,
+		up_file_size
+		FROM musicsns.view_board where bd_seq =
+		#{bdSeq}
+	</select>
+
+	<!-- count member board -->
+	<select id="authorBoard" resultType="int" parameterType="map">
+		SELECT
+		COUNT(*) FROM musicsns.board WHERE mb_name = #{mbName}
+	</select>
+
+	<select id="authorBoardList"
+		resultType="com.co.kr.domain.BoardListDomain" parameterType="map">
+		SELECT
+		bd_seq, mb_id, mb_name, bd_title, bd_content,
+		bd_create_at,
+		bd_update_at, files, comment, `like`, likecount
+		FROM musicsns.board where mb_name =
+		#{mbName}
+	</select>
+
+	<select id="selectlike" parameterType="hashMap"
+		resultType="java.lang.Integer">
+		SELECT count(DISTINCT bd_seq, mb_id) FROM musicsns.like
+		WHERE bd_seq = #{bdSeq}
+	</select>
+	<!--게시글 삭제했을 때 메모리 차지 안하게끔 삭제하게 해주도록 하기 위함 -->
+	<delete id="deletelike" parameterType="hashMap">
+		DELETE FROM musicsns.like
+		WHERE bd_seq = #{bdSeq}
+	</delete>
+	<delete id="deletelikeuser" parameterType="hashMap">
+		DELETE FROM
+		musicsns.like WHERE mb_id = #{mbId}
+	</delete>
+
+	<!-- 중복으로 좋아요를 누를 때, mbId로 count해서 사용자가 좋아요를 눌럿는지 확인하기 위함 -->
+	<select id="duplicatelike" parameterType="hashMap"
+		resultType="java.lang.Integer">
+		SELECT count(bd_seq) FROM musicsns.like WHERE mb_id =
+		#{mbId} AND bd_seq = #{bdSeq}
+	</select>
+	<!-- 중복일 때 좋아요 삭제 -->
+	<delete id="deletelikeone" parameterType="hashMap">
+		DELETE FROM
+		musicsns.like WHERE bd_seq = #{bdSeq} AND mb_id = #{mbId}
+	</delete>
+	<!-- 중복이 아니라면 추가 -->
+	<insert id="insertlike" parameterType="hashMap">
+		INSERT INTO musicsns.like
+		(bd_seq, mb_id, status) VALUES (#{bdSeq}, #{mbId}, 'like!')
+	</insert>
+	<!-- status 관리 -->
+	<update id="updatelike" parameterType="hashMap">
+		UPDATE musicsns.like
+		SET status = #{status}
+		WHERE bd_seq = #{bdSeq}
+		AND mb_id = #{mbId}
+	</update>
+	<select id="selectstatus" resultType="java.lang.String" parameterType="hashMap">
+		SELECT status FROM musicsns.like WHERE bd_seq = #{bdSeq} AND mb_id = #{mbId}
+	</select>
+	<!-- 좋아요한 사람 select -->
+	<select id="selectlikemember" parameterType="hashMap" resultType="com.co.kr.domain.LikeListDomain">
+		SELECT mb_name, comment FROM musicsns.view_like WHERE bd_seq = #{bdSeq}
+	</select>
+	<!-- 팔로우한 사람 select -->
+	<select id="searchfollowmember" resultType="com.co.kr.domain.LoginDomain" parameterType="hashmap">
+		SELECT * FROM musicsns.member WHERE mb_name=#{flmbName}
+	</select>
+</mapper>

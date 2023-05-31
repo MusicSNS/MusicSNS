@@ -1,0 +1,71 @@
+<section class="py-lg-1">
+	<div class="card">
+		<div class="table-responsive">
+			<th:block th:if="${bcitems}">
+				<form role="form" action="bceditSave" th:object=${fileListVO}
+					method="post" enctype="multipart/form-data">
+					<div class="section form">
+						<table>
+							<tbody>
+								<tr>
+									<td><input type="hidden" th:field="*{isEdit}" /> <input id="bdSeq"
+										type="hidden" name="bdSeq" placeholder="글번호"
+										th:value="${bcitems.bdSeq}" required /> <input type="hidden" id="bcSeq"
+										name="bcSeq" th:value="${bcitems.bcSeq}" placeholder="댓글번호"
+										required />
+										<div
+											class="input-group input-group-lg input-group-outline my-3">
+											<textarea class="form-control form-control-lg" colspan="2"
+												id="content" name="content" placeholder="댓글을 적어주세요." rows="5"
+												cols="200" required></textarea>
+										</div></td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="button"
+							style="display: flex; justify-content: flex-end;">
+							<button type="submit"
+								style="margin-right: 11px; white-space: nowrap;"
+								class="btn btn-outline-primary">수정하기</button>
+						</div>
+					</div>
+				</form>
+				<div class="card">
+					<div class="table-responsive">
+						<table class="table align-items-center mb-0">
+							<colgroup>
+								<col style="width: 45%" />
+								<col style="width: 10%" />
+								<col style="width: 15%" />
+								<col style="width: 15%" />
+								<col style="width: 10%" />
+							</colgroup>
+							<thead>
+								<tr>
+									<th>댓글</th>
+									<th>닉네임</th>
+									<th>등록일</th>
+									<th>수정일</th>
+									<th>수정/삭제</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<tr th:each="bcitem : ${bcitems}">
+									<td th:text="${bcitem.bcContent}"></td>
+									<td th:text="${bcitem.mbName}"></td>
+									<td th:text="${bcitem.bcCreateAt}"></td>
+									<td th:text="${bcitem.bcUpdateAt}"></td>
+									<td><span th:if="${bcitem.mbId == session.id}">
+											fixing... </span></td>
+								</tr>
+
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</th:block>
+		</div>
+	</div>
+</section>

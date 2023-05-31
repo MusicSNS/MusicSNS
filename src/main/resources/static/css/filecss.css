@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+.carousel-control-prev-icon, .carousel-control-next-icon {
+	background-color: #000;
+}
+
+.carousel-indicators {
+	text-align: center;
+	margin-top: 10px;
+}
+
+.carousel-indicators li {
+	background-color: #ccc;
+	border: none;
+	width: 15px;
+	height: 15px;
+	margin: 0 5px;
+	border-radius: 50%;
+}
+
+.carousel-indicators .active {
+	background-color: #000;
+}

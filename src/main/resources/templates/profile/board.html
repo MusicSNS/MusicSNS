@@ -1,0 +1,61 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="section form" th:if="${detail}"
+				style="display: block; text-align: center;"></div>
+			<div class="section form" th:unless="${detail}"
+				style="display: block; text-align: center;"></div>
+			<th:block th:if="${items}">
+				<div class="row">
+					<div th:each="item : ${items}" th:if="${mbSeq == session.mbSeq}"
+						class="col-md-4">
+						<section class="py-lg-1">
+							<div class="container py-2">
+								<div class="card card-plain">
+									<div class="card-header p-3 position-relative">
+										<a class="d-block blur-shadow-image">
+										</a> <a th:href="@{/detail(bdSeq = ${item.bdSeq})}"
+											class="text-info text-sm icon-move-right">더보기<i
+											class="fas fa-arrow-right text-xs ms-1"></i></a>
+										<div th:if="${item.files}">
+											<div th:id="'carouselExampleControls-' + ${item.bdSeq}"
+												class="carousel slide" data-ride="carousel"
+												data-interval="false">
+												<div class="carousel-inner">
+													<div th:each="file, status : ${item.files}"
+														th:class="${status.first} ? 'carousel-item active' : 'carousel-item'">
+														<img th:src="@{${file.upNewFileName}}" alt="첨부이미지"
+															style="display: block; margin: 0 auto;" height="200">
+													</div>
+												</div>
+												<a class="carousel-control-prev carousel-control"
+													th:href="'#carouselExampleControls-' + ${item.bdSeq}"
+													role="button" data-slide="prev"><span
+													class="carousel-control-prev-icon" aria-hidden="true"></span><span
+													class="sr-only">Previous</span></a> <a
+													class="carousel-control-next carousel-control"
+													th:href="'#carouselExampleControls-' + ${item.bdSeq}"
+													role="button" data-slide="next"><span
+													class="carousel-control-next-icon" aria-hidden="true"></span><span
+													class="sr-only">Next</span></a>
+												<ol class="carousel-indicators mt-3">
+													<li th:each="file, status : ${item.files}"
+														th:data-target="'#carouselExampleControls-' + ${item.bdSeq}"
+														th:data-slide-to="${status.index}"
+														th:class="${status.first} ? 'active' : ''"></li>
+												</ol>
+											</div>
+										</div>
+										<div th:unless="${item.files}">
+											<td th:text="${item.bdTitle}"></td>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+					</div>
+				</div>
+			</th:block>
+		</div>
+	</div>
+</div>

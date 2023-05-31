@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net/nz/thymeleaf/layout" itemscope
+	itemtype="http://schema.org/WebPage">
+<head>
+<title>following</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="css/filecss.css">
+</head>
+<div th:include="fragments/head.html"></div>
+<div th:include="fragments/header.html"></div>
+<div layout:fragment="content">
+
+	<body class="blog-author bg-gray-200">
+		<header>
+			<div class="page-header min-height-400"
+				style="background-image: url('img/city-profile.jpg');"
+				loading="lazy">
+				<span class="mask bg-gradient-dark opacity-5"></span>
+			</div>
+		</header>
+</div>
+<div class="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6 mb-2">
+<section class="py-lg-2">
+	<div class="card">
+  <div class="table-responsive">
+    <table class="table align-items-center mb-0">
+      <thead>
+        <tr>
+          <th style="text-align: center;" class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+          <th style="text-align: center;" class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">NickName</th>
+          <th style="text-align: center;" class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Comment</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="item : ${followingitems}">
+          <td style="text-align: center;" th:text="${item.mbId}"></td>
+          <td style="text-align: center;"><a th:href="@{profile(mbName=${item.mbName})}" th:text="${item.mbName}"></a></td>
+          <td style="text-align: center;" th:text="${item.mbComment}"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+  </section>
+  </div>
+</body>
+</html>
