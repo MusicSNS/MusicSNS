@@ -19,7 +19,7 @@ import java.util.Map;
 @Service
 @PropertySource("classpath:application.properties")
 public class GptService {
-    @Value("${apikey}")
+    @Value("${apiKey}")
     private String apikey;
     private static final String CHAT_COMPLETION_ENDPOINT = "https://api.openai.com/v1/chat/completions";
     private static final String EDIT_ENDPOINT = "https://api.openai.com/v1/edits";
