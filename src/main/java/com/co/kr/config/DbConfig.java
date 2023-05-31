@@ -18,10 +18,9 @@ public class DbConfig {
 	public DataSource dataSource() {
 		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		//dataSource.setUrl("jdbc:mysql://musicsns.cttt27ydojli.ap-northeast-2.rds.amazonaws.com:3306/musicsns?autoReconnect=true&serverTimezone=UTC&characterEncoding=UTF-8");
-		dataSource.setUrl("jdbc:mysql://localhost:3306/musicsns?autoReconnect=true&serverTimezone=UTC&characterEncoding=UTF-8");
-		dataSource.setUsername("root");
-		dataSource.setPassword("root");
+		dataSource.setUrl("jdbc:mysql://musicsns.cttt27ydojli.ap-northeast-2.rds.amazonaws.com:3306/musicsns?autoReconnect=true&serverTimezone=UTC&characterEncoding=UTF-8");
+		dataSource.setUsername("admin");
+		dataSource.setPassword("adminadmin!");
 		dataSource.setMaxIdle(5);
 		dataSource.setMinIdle(0);
 		dataSource.setDefaultAutoCommit(false);
