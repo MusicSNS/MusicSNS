@@ -22,32 +22,38 @@
 			</div>
 		</header>
 </div>
-<div class="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6 mb-2">
-<section class="py-lg-2">
-	<div class="card">
-  <div class="table-responsive">
-    <table class="table align-items-center mb-0">
-      <thead>
-        <tr>
-          <th style="text-align: center;" class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
-          <th style="text-align: center;" class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">NickName</th>
-          <th style="text-align: center;" class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Comment</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-      <th:block th:if="${followitems}">
-        <tr th:each="item : ${followitems}">
-          <td style="text-align: center;" th:text="${item.flmbId}"></td>
-          <td style="text-align: center;"><a th:href="@{profile(mbName=${item.flmbName})}" th:text="${item.flmbName}"></a></td>
-          <td style="text-align: center;" th:text="${item.flmbComment}"></td>
-        </tr>
-        </th:block>
-      </tbody>
-    </table>
-  </div>
-  </div>
-  </section>
-  </div>
+<div
+	class="card card-frame card-body blur shadow-blur mx-3 mx-md-4 mt-n6 mb-2">
+	<section class="py-lg-2">
+		<div class="card-body" style="margin-left: 6%">
+			<div class="table-responsive">
+				<table class="table align-items-center mb-0">
+					<thead>
+						<tr>
+							<th style="text-align: center;"
+								class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+							<th style="text-align: center;"
+								class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">NickName</th>
+							<th style="text-align: center;"
+								class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Comment</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<th:block th:if="${followitems}">
+							<tr th:each="item : ${followitems}">
+								<td style="text-align: center;" th:text="${item.flmbId}"></td>
+								<td style="text-align: center;"><a
+									th:href="@{profile(mbName=${item.flmbName})}"
+									th:text="${item.flmbName}"></a></td>
+								<td style="text-align: center;" th:text="${item.flmbComment}"></td>
+							</tr>
+						</th:block>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</section>
+</div>
 </body>
 </html>

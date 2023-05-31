@@ -54,6 +54,7 @@ public class UserController {
 
 	@Autowired
 	private ProfileService profileService;
+
 	// 진입점
 	@GetMapping("/")
 	public String index() {
@@ -83,7 +84,6 @@ public class UserController {
 		int followingsize = profileService.selectcountfollowing(mb);
 		List<BoardListDomain> items = uploadService.authorBoardList(mb);
 		int size = uploadService.authorBoard(mb);
-		System.out.println("items ==> " + items);
 		for (BoardListDomain item : items) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("bdSeq", Integer.parseInt(item.getBdSeq()));
@@ -96,72 +96,57 @@ public class UserController {
 		}
 		UserFileDomain profile = profileService.mbSelectOneFile(mb);
 		if (profile != null) {
-		    String profilePath = profile.getUpNewFileName().replace("\\\\", "/");
-		    profile.setUpFilePath(profilePath);
-		    mav.addObject("profile", profile.getUpFilePath());
-		} else {
-		    System.out.println("NULL");
+			String profilePath = profile.getUpNewFileName().replace("\\\\", "/");
+			profile.setUpFilePath(profilePath);
+			mav.addObject("profile", profile.getUpFilePath());
 		}
 		mav.addObject("followsize", followsize);
 		mav.addObject("followingsize", followingsize);
 		mav.addObject("items", items);
-		mav.addObject("itemSize",size);
+		mav.addObject("itemSize", size);
 		mav.addObject("mbSeq", session.getAttribute("mbSeq"));
 		mav.addObject("mbName", session.getAttribute("name").toString());
 		mav.setViewName("profile/author.html");
 		return mav;
 	}
 
-	//UserController.java
-
-	@GetMapping(value="/profile")
-		public ModelAndView profile(HttpServletRequest request) {
-			ModelAndView mav = new ModelAndView();
-			HttpSession session = request.getSession();
-			HashMap<String, Object> mb = new HashMap<String, Object>();
-			mb.put("mbName", request.getParameter("mbName"));
-			int followingsize = profileService.selectcountfollowing(mb);
-			int followsize = profileService.selectcountfollow(mb);
-			
-			HashMap<String, Object> mab = new HashMap<>();
-			mab.put("mbName", session.getAttribute("name"));
-			mab.put("flmbName", request.getParameter("mbName"));
-			int duplecheck = profileService.duplicatefollow(mab);
-			
-			List<BoardListDomain> items = uploadService.authorBoardList(mb);
-			int size = uploadService.authorBoard(mb);
-			System.out.println("items ==> " + items);
-			for (BoardListDomain item : items) {
-				HashMap<String, Object> map = new HashMap<String, Object>();
-				map.put("bdSeq", Integer.parseInt(item.getBdSeq()));
-				List<BoardFileDomain> fileList = uploadService.boardSelectOneFile(map);
-				for (BoardFileDomain list : fileList) {
-					String path = list.getUpNewFileName().replaceAll("\\\\", "/");
-					list.setUpFilePath(path);
-				}
-				item.setFiles(fileList);
+	@GetMapping(value = "/profile")
+	public ModelAndView profile(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView();
+		HttpSession session = request.getSession();
+		HashMap<String, Object> mb = new HashMap<String, Object>();
+		mb.put("mbName", request.getParameter("mbName"));
+		int followingsize = profileService.selectcountfollowing(mb);
+		int followsize = profileService.selectcountfollow(mb);
+		List<BoardListDomain> items = uploadService.authorBoardList(mb);
+		int size = uploadService.authorBoard(mb);
+		for (BoardListDomain item : items) {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("bdSeq", Integer.parseInt(item.getBdSeq()));
+			List<BoardFileDomain> fileList = uploadService.boardSelectOneFile(map);
+			for (BoardFileDomain list : fileList) {
+				String path = list.getUpNewFileName().replaceAll("\\\\", "/");
+				list.setUpFilePath(path);
 			}
-			UserFileDomain profile = profileService.mbSelectOneFile(mb);
-			if (profile != null) {
-			    String profilePath = profile.getUpNewFileName().replace("\\\\", "/");
-			    profile.setUpFilePath(profilePath);
-			    mav.addObject("profile", profile.getUpFilePath());
-			} else {
-			    System.out.println("NULL");
-			}
-			String comment = profileService.userSelectName(mb);
-			
-			mav.addObject("duplecheck", duplecheck);
-			mav.addObject("followingsize", followingsize);
-			mav.addObject("followsize", followsize);
-			mav.addObject("comment",comment);
-			mav.addObject("othername",request.getParameter("mbName").toString());
-			mav.addObject("items", items);
-			mav.addObject("itemSize",size);
-			mav.addObject("mbSeq", session.getAttribute("mbSeq"));
-			mav.setViewName("otherprofile/other.html");
-			return mav;
+			item.setFiles(fileList);
 		}
+		UserFileDomain profile = profileService.mbSelectOneFile(mb);
+		if (profile != null) {
+			String profilePath = profile.getUpNewFileName().replace("\\\\", "/");
+			profile.setUpFilePath(profilePath);
+			mav.addObject("profile", profile.getUpFilePath());
+		}
+		String comment = profileService.userSelectName(mb);
+		mav.addObject("followingsize", followingsize);
+		mav.addObject("followsize", followsize);
+		mav.addObject("comment", comment);
+		mav.addObject("othername", request.getParameter("mbName").toString());
+		mav.addObject("items", items);
+		mav.addObject("itemSize", size);
+		mav.addObject("mbSeq", session.getAttribute("mbSeq"));
+		mav.setViewName("otherprofile/other.html");
+		return mav;
+	}
 
 	// signup
 	@GetMapping("/signup")
@@ -186,16 +171,14 @@ public class UserController {
 			CommonUtils.redirect(alertText, redirectPath, response);
 			return mav;
 		}
-
 		String IP = CommonUtils.getClientIP(request);
 		session.setAttribute("ip", IP);
-		session.setAttribute("mbSeq",loginDomain.getMbSeq());
+		session.setAttribute("mbSeq", loginDomain.getMbSeq());
 		session.setAttribute("id", loginDomain.getMbId());
 		session.setAttribute("pw", loginDomain.getMbPw());
 		session.setAttribute("name", loginDomain.getMbName());
 		session.setAttribute("mbLevel", loginDomain.getMbLevel());
 		session.setAttribute("comment", loginDomain.getMbComment());
-//		session.setAttribute("mac", getLocalMacAddress());
 		mav.addObject("data", new AlertUtils("로그인 성공", "bdList"));
 		mav.setViewName("alert/alert");
 		return mav;
@@ -204,7 +187,6 @@ public class UserController {
 	// 회원가입 GET
 	@RequestMapping(value = "sign", method = RequestMethod.GET)
 	public void sign() {
-		System.out.println("가입하기 GET");
 	}
 
 	// 회원가입 POST
@@ -212,13 +194,12 @@ public class UserController {
 	public ModelAndView sign(LoginDomain loginDomain, HttpServletResponse response, HttpServletRequest request,
 			AlertUtils alert) throws IOException {
 		ModelAndView mav = new ModelAndView();
-		System.out.println("가입하기 POST");
 		int totalcount = userService.mbGetAll();
 		loginDomain.setMbId(request.getParameter("id"));
 		loginDomain.setMbName(request.getParameter("name"));
 		loginDomain.setMbPw(request.getParameter("pw"));
 		loginDomain.setMbIp(CommonUtils.getClientIP(request));
-		loginDomain.setMbLevel((totalcount == 0 ) ? 100 : 1);
+		loginDomain.setMbLevel((totalcount == 0) ? 100 : 1);
 		loginDomain.setMbUse("Y");
 		if (check(request) == 1) {
 			System.out.println(check(request));
@@ -228,7 +209,7 @@ public class UserController {
 		}
 		userService.mbCreate(loginDomain);
 		mav.addObject("data", new AlertUtils("회원가입이 완료되었습니다.", "signin"));
-		System.out.println("가입 완료");
+		System.out.println(request.getParameter("name")+"님 가입 완료");
 		mav.setViewName("alert/alert");
 		return mav;
 	}
@@ -239,7 +220,6 @@ public class UserController {
 	public int check(HttpServletRequest request) {
 		String id = request.getParameter("id");
 		String name = request.getParameter("name");
-		// 중복체크
 		Map<String, String> map = new HashMap();
 		map.put("mbId", id);
 		map.put("mbName", name);
@@ -249,27 +229,27 @@ public class UserController {
 
 	// 로그아웃
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(HttpServletRequest request) throws Exception {
+	public void logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		System.out.println("로그아웃");
 		HttpSession session = request.getSession();
 		session.invalidate();
-		return "redirect:/";
+		String alertText = "로그아웃 되었습니다.";
+		String redirectPath = "/main";
+		CommonUtils.redirect(alertText, redirectPath, response);
 	}
 
 	@RequestMapping(value = "bdList")
 	public ModelAndView bdList(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		ModelAndView mav = new ModelAndView();
-		
 		HashMap<String, Object> like = new HashMap<String, Object>();
-		like.put("mbId", session.getAttribute("id")); //추가
-		
- 		List<BoardListDomain> items = uploadService.boardList();
+		like.put("mbId", session.getAttribute("id")); // 추가
+		List<BoardListDomain> items = uploadService.boardList();
 		System.out.println("items ==> " + items);
 		for (BoardListDomain item : items) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("bdSeq", Integer.parseInt(item.getBdSeq()));
-			like.put("bdSeq", Integer.parseInt(item.getBdSeq())); //추가
+			like.put("bdSeq", Integer.parseInt(item.getBdSeq())); // 추가
 			List<BoardFileDomain> fileList = uploadService.boardSelectOneFile(map);
 			List<CommentListDomain> commentList = commentService.commentList(map);
 			for (BoardFileDomain list : fileList) {
@@ -280,11 +260,9 @@ public class UserController {
 			item.setFiles(fileList);
 			int likecount = uploadService.selectlike(like);
 			String statlike = uploadService.selectstatus(like);
-			System.out.println("status : "+statlike);
 			if (statlike == null) {
 				item.setLike("like!");
-			}
-			else {
+			} else {
 				item.setLike("unlike!");
 			}
 			item.setLikecount(likecount);
@@ -293,126 +271,115 @@ public class UserController {
 		mav.setViewName("pages/board.html");
 		return mav;
 	}
-	
-	//대시보드 리스트 보여주기
+
+	// 대시보드 리스트 보여주기
 	@GetMapping("mbList") // required=false null 일때 받기 에러금지 // querystring == @RequestParam
 	public ModelAndView mbList(HttpServletRequest request) {
-				
-			ModelAndView mav = new ModelAndView();
-			HashMap<String, Object> map = new HashMap<>();
-			HttpSession session = request.getSession();
-			
-			String MenuName = "Admin";
-			List<LoginDomain> loginDomains = userService.mbAllList();
-			
-			mav.addObject("menuname", MenuName);
-			mav.addObject("items", loginDomains);
-			mav.setViewName("pages/admin");
-			return mav; 
-		};
+		ModelAndView mav = new ModelAndView();
+		HashMap<String, Object> map = new HashMap<>();
+		HttpSession session = request.getSession();
+		String MenuName = "Admin";
+		List<LoginDomain> loginDomains = userService.mbAllList();
+		mav.addObject("menuname", MenuName);
+		mav.addObject("items", loginDomains);
+		mav.setViewName("pages/admin");
+		return mav;
+	};
 
-	
-	//수정페이지 이동
+	// 수정페이지 이동
 	@GetMapping("/modify/{mbSeq}")
-	   public ModelAndView mbModify(@PathVariable("mbSeq") String mbSeq, RedirectAttributes re) throws IOException {
-			ModelAndView mav = new ModelAndView();
-			re.addAttribute("mbSeq", mbSeq);
-			mav.setViewName("redirect:/mbEditList");
-			return mav;
-		};
-		
-	//대시보드 리스트 보여주기
-	@GetMapping("mbEditList")
-	   public ModelAndView mbListEdit(@RequestParam("mbSeq") String mbSeq, HttpServletRequest request) {
-			
-			ModelAndView mav = new ModelAndView();
-			// 해당리스트 가져옴
-			HashMap<String, String> map = new HashMap<>();
-			map.put("mbSeq", mbSeq);
-			System.out.println(map);
-			LoginDomain loginDomain = userService.mbSelectList(map);
-			mav.addObject("edititem",loginDomain);
-			mbList(request);
-			List<LoginDomain> list = userService.mbAllList();
-			mav.addObject("items", list);
-			mav.setViewName("pages/adminEdit");
-			return mav; 
-		};
-		
-	//수정업데이트
-	@RequestMapping("/update")
-	public ModelAndView mbModify(HttpServletRequest request, RedirectAttributes re, LoginVO loginVO) throws IOException {
-			
-			ModelAndView mav = new ModelAndView();
-			
-			//page 초기화
-			HttpSession session = request.getSession();
-			
-			System.out.println(request.getParameter("id"));
-			System.out.println(request.getParameter("name"));
-			System.out.println(request.getParameter("pw"));
-			System.out.println(request.getParameter("comment"));
-			System.out.println(request.getParameter("id"));
-			//db 업데이트
-			LoginDomain loginDomain = null; //초기화
-			String IP = CommonUtils.getClientIP(request);
-			loginDomain = LoginDomain.builder()
-					.mbName(request.getParameter("name"))
-					.mbPw(request.getParameter("pw"))
-					.mbLevel(Integer.parseInt(request.getParameter("level")))
-					.mbComment(request.getParameter("comment"))
-					.mbIp(IP)
-					.mbUse("Y")
-					.mbId(request.getParameter("id"))
-					.build();
-			
-			userService.mbUpdate(loginDomain);
-			
-			mav.setViewName("redirect:/mbList");
-			return mav;
-		};
+	public ModelAndView mbModify(@PathVariable("mbSeq") String mbSeq, RedirectAttributes re) throws IOException {
+		ModelAndView mav = new ModelAndView();
+		re.addAttribute("mbSeq", mbSeq);
+		mav.setViewName("redirect:/mbEditList");
+		return mav;
+	};
 
-	//삭제
+	// 대시보드 리스트 보여주기
+	@GetMapping("mbEditList")
+	public ModelAndView mbListEdit(@RequestParam("mbSeq") String mbSeq, HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView();
+		HashMap<String, String> map = new HashMap<>();
+		map.put("mbSeq", mbSeq);
+		System.out.println(map);
+		LoginDomain loginDomain = userService.mbSelectList(map);
+		mav.addObject("edititem", loginDomain);
+		mbList(request);
+		List<LoginDomain> list = userService.mbAllList();
+		mav.addObject("items", list);
+		mav.setViewName("pages/adminEdit");
+		return mav;
+	};
+
+	// 수정업데이트
+	@RequestMapping("/update")
+	public ModelAndView mbModify(HttpServletRequest request, RedirectAttributes re, LoginVO loginVO)
+			throws IOException {
+		ModelAndView mav = new ModelAndView();
+		HttpSession session = request.getSession();
+		LoginDomain loginDomain = null;
+		String IP = CommonUtils.getClientIP(request);
+		loginDomain = LoginDomain.builder().mbName(request.getParameter("name")).mbPw(request.getParameter("pw"))
+				.mbLevel(Integer.parseInt(request.getParameter("level"))).mbComment(request.getParameter("comment"))
+				.mbIp(IP).mbUse("Y").mbId(request.getParameter("id")).build();
+		userService.mbUpdate(loginDomain);
+		System.out.println(request.getParameter("name")+"님 정보를 수정하였습니다.");
+		mav.setViewName("redirect:/mbList");
+		return mav;
+	};
+
+	// 삭제
 	@GetMapping("/mbremove/{mbId}")
 	public ModelAndView mbRemove(RedirectAttributes re, HttpServletRequest request) throws IOException {
-			ModelAndView mav = new ModelAndView();
-			
-			
-			System.out.println(request.getParameter("mbId"));
-			//db 삭제
-			Map map = new HashMap<String, String>();
-			map.put("mbId", request.getParameter("mbId"));
-			userService.mbRemove(map);
-					
-			//보고 있던 현재 페이지로 이동
-			mav.setViewName("redirect:/mbList");
-			return mav;
-		};
-		
+		ModelAndView mav = new ModelAndView();
+		// db 삭제
+		HashMap map = new HashMap<String, String>();
+		map.put("mbId", request.getParameter("mbId"));
+		userService.mbRemove(map);
+		System.out.println(request.getParameter("mbId")+"님 계정을 삭제하였습니다.");
+		// 보고 있던 현재 페이지로 이동
+		mav.setViewName("redirect:/mbList");
+		return mav;
+	};
+
 	// 회원가입 POST
 	@RequestMapping(value = "adminsign", method = RequestMethod.POST)
 	public ModelAndView adminsign(LoginDomain loginDomain, HttpServletResponse response, HttpServletRequest request,
 			AlertUtils alert) throws IOException {
-			ModelAndView mav = new ModelAndView();
-			System.out.println("가입하기 POST");
-			int totalcount = userService.mbGetAll();
-			loginDomain.setMbId(request.getParameter("id"));
-			loginDomain.setMbName(request.getParameter("name"));
-			loginDomain.setMbPw(request.getParameter("pw"));
-			loginDomain.setMbIp(CommonUtils.getClientIP(request));
-			loginDomain.setMbLevel((totalcount == 0 ) ? 100 : 1);
-			loginDomain.setMbUse("Y");
-			if (check(request) == 1) {
-				System.out.println(check(request));
-				mav.addObject("data", new AlertUtils("이메일이나 닉네임이 중복되었습니다.", "signup"));
-				mav.setViewName("redirect:/mbList");
-				return mav;
-			}
-			userService.mbCreate(loginDomain);
-			mav.addObject("data", new AlertUtils("회원가입이 완료되었습니다.", "signin"));
-			System.out.println("가입 완료");
+		ModelAndView mav = new ModelAndView();
+		System.out.println("가입하기 POST");
+		int totalcount = userService.mbGetAll();
+		loginDomain.setMbId(request.getParameter("id"));
+		loginDomain.setMbName(request.getParameter("name"));
+		loginDomain.setMbPw(request.getParameter("pw"));
+		loginDomain.setMbIp(CommonUtils.getClientIP(request));
+		loginDomain.setMbLevel((totalcount == 0) ? 100 : 1);
+		loginDomain.setMbUse("Y");
+		if (check(request) == 1) {
+			mav.addObject("data", new AlertUtils("이메일이나 닉네임이 중복되었습니다.", "signup"));
 			mav.setViewName("redirect:/mbList");
 			return mav;
 		}
-		
+		userService.mbCreate(loginDomain);
+		mav.addObject("data", new AlertUtils("회원가입이 완료되었습니다.", "signin"));
+		System.out.println(request.getParameter("name").toString()+"으로 계정 생성 완료");
+		mav.setViewName("redirect:/mbList");
+		return mav;
+	}
+
+	// 회원 탈퇴
+	@RequestMapping(value = "/drawal", method = RequestMethod.GET)
+	public void drawal(LoginVO loginVO, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		HttpSession session = request.getSession();
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("mbId", String.valueOf(session.getAttribute("id")));
+		uploadService.bdFileAllRemove(map);
+		uploadService.bdContentAllRemove(map);
+		userService.mbRemove(map);
+		System.out.println(session.getAttribute("name").toString()+"님 회원탈퇴 완료");
+		session.invalidate();
+		String alertText = "회원탈퇴 되었습니다.";
+		String redirectPath = "/main";
+		CommonUtils.redirect(alertText, redirectPath, response);
+	}
 }

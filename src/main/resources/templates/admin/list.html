@@ -1,41 +1,43 @@
 <!--list.html-->
 <div class="card card-frame">
-<div class="card-body" style="margin-left: 6%">
-    <table>
-        <colgroup>
-            <col style="width: 15%"/>
-            <col style="width: 15%"/>
-            <col style="width: 15%"/>
-            <col style="width: 6%"/>
-            <col style="width: 15%"/>
-            <col style="width: 15%"/>
-            <col style="width: 30%"/>
-        </colgroup>
-        <thead>
-	        <tr>
-	            <th class="text-center">아이디</th>
-	            <th class="text-center">닉네임</th>
-	            <th class="text-center">패스워드</th>
-	            <th class="text-center">회원등급</th>
-	            <th class="text-center">생성일자</th>
-	            <th class="text-center">업데이트일자</th>
-	            <th class="text-center">변경</th>
-	        </tr>
-        </thead>
-        <tbody>
-            <tr th:each="item : ${items}">
-                <td class="text-center"><a th:href="@{profile(mbName=${item.mbName})}" th:text="${item.mbId}"></a></td>
-                <td class="text-center" th:text="${item.mbName}"></td>
-                <td class="text-center" th:text="${item.mbPw}"></td>
-                <td class="text-center" th:text="${item.mbLevel}"></td>
-                <td class="text-center" th:text="${item.mbCreateAt}"></td>
-                <td class="text-center" th:text="${item.mbUpdateAt}"></td>
-                <td class="text-center" style="display: flex; align-items: center; justify-content: center">
-                   <a th:href="@{/modify/{mbSeq}(mbSeq = ${item.mbSeq})}">수정</a> / 
-                   <a th:href="@{/mbremove/{mbSeq}(mbId = ${item.mbId})}"> 삭제</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    </div>
+	<div class="card-body" style="margin-left: 6%">
+		<table>
+			<colgroup>
+				<col style="width: 15%" />
+				<col style="width: 15%" />
+				<col style="width: 15%" />
+				<col style="width: 6%" />
+				<col style="width: 15%" />
+				<col style="width: 15%" />
+				<col style="width: 30%" />
+			</colgroup>
+			<thead>
+				<tr>
+					<th class="text-center">아이디</th>
+					<th class="text-center">닉네임</th>
+					<th class="text-center">패스워드</th>
+					<th class="text-center">회원등급</th>
+					<th class="text-center">생성일자</th>
+					<th class="text-center">업데이트일자</th>
+					<th class="text-center">변경</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="item : ${items}">
+					<td class="text-center"><a
+						th:href="@{profile(mbName=${item.mbName})}" th:text="${item.mbId}"></a></td>
+					<td class="text-center" th:text="${item.mbName}"></td>
+					<td class="text-center" th:text="${item.mbPw}"></td>
+					<td class="text-center" th:text="${item.mbLevel}"></td>
+					<td class="text-center" th:text="${item.mbCreateAt}"></td>
+					<td class="text-center" th:text="${item.mbUpdateAt}"></td>
+					<td class="text-center"
+						style="display: flex; align-items: center; justify-content: center">
+						<a th:href="@{/modify/{mbSeq}(mbSeq = ${item.mbSeq})}">수정</a> / <a
+						th:href="@{/mbremove/{mbSeq}(mbId = ${item.mbId})}"> 삭제</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>

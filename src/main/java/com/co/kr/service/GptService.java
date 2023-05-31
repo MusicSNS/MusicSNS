@@ -20,7 +20,7 @@ import java.util.Map;
 @PropertySource("classpath:application.properties")
 public class GptService {
     @Value("${apikey}")
-    private String API_KEY = "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";
+    private String apikey;
     private static final String CHAT_COMPLETION_ENDPOINT = "https://api.openai.com/v1/chat/completions";
     private static final String EDIT_ENDPOINT = "https://api.openai.com/v1/edits";
     private static final String IMAGES_ENDPOINT = "https://api.openai.com/v1/images/generations";
@@ -28,28 +28,21 @@ public class GptService {
     public String generateText(String prompt, float temperature, int maxTokens) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer " + API_KEY);
-
+        headers.set("Authorization", "Bearer " + apikey);
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("model", "gpt-3.5-turbo");
-
         Map<String, Object> message = new HashMap<>();
         message.put("role", "user");
         message.put("content", prompt);
-
         List<Map<String, Object>> messages = new ArrayList<>();
         messages.add(message);
-
         requestBody.put("messages", messages);
         requestBody.put("temperature", temperature);
         requestBody.put("max_tokens", maxTokens);
-
         HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
-
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.postForEntity(CHAT_COMPLETION_ENDPOINT, requestEntity, String.class);
         String responseBody = response.getBody();
-
         // JSON 파싱
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -64,7 +57,6 @@ public class GptService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
@@ -72,9 +64,7 @@ public class GptService {
     public ResponseVo getConversation(RequestQuestionVo requestquestion) {
         ResponseVo responseVo = new ResponseVo();
         try {
-            System.out.println(requestquestion.getQuestion());
             String answer = generateText(requestquestion.getQuestion(), 0.5f, 1000);
-            System.out.println("gptConversation : "+answer);
             responseVo.setCode(200);
             responseVo.setResponse(answer);
         } catch (Exception e) {

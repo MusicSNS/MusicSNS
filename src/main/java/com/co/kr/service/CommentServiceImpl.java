@@ -37,19 +37,12 @@ public class CommentServiceImpl implements CommentService {
 
 		if (fileListVO.getIsEdit() != null) {
 			commentContentDomain.setBcContent(httpReq.getParameter("content"));
-			System.out.println("commentContentDomain : " + httpReq.getParameter("content") + ", "
-					+ commentContentDomain.getBcSeq() + ", " + commentContentDomain.getBdSeq() + ", "
-					+ commentContentDomain.getMbName());
 			System.out.println("댓글 수정 업데이트");
 			// db 업데이트
 			commentMapper.commentUpdate(commentContentDomain);
 		} else {
 			// db 인서트
 			commentContentDomain.setBcContent(httpReq.getParameter("content"));
-			System.out.println("commentContentDomain : " + httpReq.getParameter("content") + ", "
-					+ commentContentDomain.getBcSeq() + ", " + fileListVO.getBcseq() + ", "
-					+ commentContentDomain.getMbName());
-
 			commentMapper.commentUpload(commentContentDomain);
 			System.out.println("댓글 db 인서트");
 		}

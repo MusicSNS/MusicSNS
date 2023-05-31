@@ -53,13 +53,13 @@ public class ProfileServiceImpl implements ProfileService {
 				.mbName(fileListVO.getMname()).mbContent(fileListVO.getMcontent()).mbSeq(fileListVO.getMbseq()).build();
 		if (fileListVO.getIsEdit() != null) {
 			userContentDomain.setMbSeq(fileListVO.getMbseq());
-			System.out.println("수정업데이트");
+			System.out.println("Profile 수정 업데이트");
 			// db 업데이트
 			profileMapper.mbContentUpdate(userContentDomain);
 		} else {
 			// db 인서트
 			profileMapper.mbContentUpdate(userContentDomain);
-			System.out.println("db 인서트");
+			System.out.println("Profile database 인서트");
 		}
 
 		// file 데이터 db 저장시 쓰일 값 추출
@@ -169,16 +169,13 @@ public class ProfileServiceImpl implements ProfileService {
 																												// 폴더 생성
 																												// 했기때문
 							.upFilePath(targetPath.toString()).upFileSize((int) multipartFile.getSize()).build();
-					System.out.println(userFileDomain);
 					int affectedRows = profileMapper.mbFileUpdateCheck(userFileDomain);
 
 					if (affectedRows > 0) {
 						profileMapper.mbFileUpdate(userFileDomain);
-						System.out.println("Update done");
 					} else {
 						// DB가 변경되지 않았을 때 처리할 코드 작성
 						profileMapper.mbFileUpload(userFileDomain);
-						System.out.println("Upload done");
 						// 다른 코드 실행
 					}
 				} catch (IOException e) {

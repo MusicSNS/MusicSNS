@@ -21,7 +21,7 @@
 									id="dropdownMenuPages" data-bs-toggle="dropdown"
 									aria-expanded="false"> <i
 										class="material-icons opacity-6 me-2 text-md">dashboard</i>
-										Pages <img src="img/down-arrow-dark.svg" alt="down-arrow"
+										Developer <img src="img/down-arrow-dark.svg" alt="down-arrow"
 										class="arrow ms-auto ms-md-2">
 								</a>
 									<div
@@ -30,26 +30,11 @@
 										<div class="d-none d-lg-block">
 											<h6
 												class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
-												Landing Pages</h6>
+												Are you curious about us?</h6>
 											<a th:href="@{about}" class="dropdown-item border-radius-md">
 												<span>About Us</span>
-											</a> <a th:href="@{author(mbSeq=${session.mbSeq})}"
-												class="dropdown-item border-radius-md"> <span>Author</span>
-											</a> <a th:href="@{bdList}"
-												class="dropdown-item border-radius-md"> <span>Board</span>
-											</a><a th:href="@{mbList}" th:if="${session.mbLevel}==100"
-												class="dropdown-item border-radius-md"> <span>Admin</span>
-											</a><a th:href="@{gptview}" class="dropdown-item border-radius-md">
-												<span>GPT Recommend</span>
-											</a>
-											<h6
-												class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1 mt-3">
-												Account</h6>
-											<a th:href="@{logout}" class="dropdown-item border-radius-md">
-												<span>Logout</span>
 											</a>
 										</div>
-
 										<div class="d-lg-none">
 											<h6
 												class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
@@ -57,25 +42,146 @@
 
 											<a th:href="@{about}" class="dropdown-item border-radius-md">
 												<span>About Us</span>
-											</a> <a th:href="@{author(mbSeq=${session.mbSeq})}"
-												class="dropdown-item border-radius-md"> <span>Author</span>
-											</a> <a th:href="@{bdList}"
-												class="dropdown-item border-radius-md"> <span>Board</span>
-											</a><a th:href="@{mbList}" th:if="${session.mbLevel}==100"
-												class="dropdown-item border-radius-md"> <span>Admin</span>
-											</a><a th:href="@{gptview}" class="dropdown-item border-radius-md">
-												<span>GPT Recommend</span>
+											</a>
+										</div>
+									</div></li>
+								<li class="nav-item dropdown dropdown-hover mx-2"><a
+									class="nav-link ps-2 d-flex cursor-pointer align-items-center"
+									id="dropdownMenuPages" data-bs-toggle="dropdown"
+									aria-expanded="false"> <i
+										class="material-icons opacity-6 me-2 text-md">dashboard</i>
+										Board <img src="img/down-arrow-dark.svg" alt="down-arrow"
+										class="arrow ms-auto ms-md-2">
+								</a>
+									<div
+										class="dropdown-menu dropdown-menu-animation ms-n3 dropdown-md p-3 border-radius-xl mt-0 mt-lg-3"
+										aria-labelledby="dropdownMenuPages">
+										<div class="d-none d-lg-block">
+											<h6
+												class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+												Main Pages</h6>
+											<a th:href="@{bdList}" class="dropdown-item border-radius-md">
+												<span>Board</span>
+											</a>
+										</div>
+
+										<div class="d-lg-none">
+											<h6
+												class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+												Main Pages</h6>
+
+											<a th:href="@{bdList}" class="dropdown-item border-radius-md">
+												<span>Board</span>
+											</a>
+										</div>
+									</div></li>
+								<li class="nav-item dropdown dropdown-hover mx-2"><a
+									class="nav-link ps-2 d-flex cursor-pointer align-items-center"
+									id="dropdownMenuPages" data-bs-toggle="dropdown"
+									aria-expanded="false"> <i
+										class="material-icons opacity-6 me-2 text-md">dashboard</i>
+										Recommend <img src="img/down-arrow-dark.svg" alt="down-arrow"
+										class="arrow ms-auto ms-md-2">
+								</a>
+									<div
+										class="dropdown-menu dropdown-menu-animation ms-n3 dropdown-md p-3 border-radius-xl mt-0 mt-lg-3"
+										aria-labelledby="dropdownMenuPages">
+										<div class="d-none d-lg-block">
+											<h6
+												class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+												Recommend Some Music</h6>
+											<a th:href="@{gptview}"
+												class="dropdown-item border-radius-md"> <span>GPT
+													Recommend</span>
+											</a>
+										</div>
+
+										<div class="d-lg-none">
+											<h6
+												class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+												Recommend Some Music</h6>
+											<a th:href="@{gptview}"
+												class="dropdown-item border-radius-md"> <span>GPT
+													Recommend</span>
+											</a>
+										</div>
+									</div></li>
+								<li class="nav-item dropdown dropdown-hover mx-2"><a
+									class="nav-link ps-2 d-flex cursor-pointer align-items-center"
+									id="dropdownMenuPages" data-bs-toggle="dropdown"
+									aria-expanded="false"> <i
+										class="material-icons opacity-6 me-2 text-md">dashboard</i>
+										Account<img src="img/down-arrow-dark.svg" alt="down-arrow"
+										class="arrow ms-auto ms-md-2">
+								</a>
+									<div
+										class="dropdown-menu dropdown-menu-animation ms-n3 dropdown-md p-3 border-radius-xl mt-0 mt-lg-3"
+										aria-labelledby="dropdownMenuPages">
+										<div class="d-none d-lg-block">
+											<h6
+												class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+												Profile</h6>
+											<a th:href="@{author(mbSeq=${session.mbSeq})}"
+												class="dropdown-item border-radius-md"> <span>MyProfile</span>
 											</a>
 											<h6
 												class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1 mt-3">
-												Account</h6>
+												Account Management</h6>
 											<a th:href="@{logout}" class="dropdown-item border-radius-md">
 												<span>Logout</span>
+											</a><a th:href="@{drawal}" class="dropdown-item border-radius-md">
+												<span>Drawal</span>
 											</a>
+										</div>
 
+										<div class="d-lg-none">
+											<h6
+												class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+												Profile</h6>
+											<a th:href="@{author(mbSeq=${session.mbSeq})}"
+												class="dropdown-item border-radius-md"> <span>MyProfile</span>
+											</a> <a th:href="@{mbList}" th:if="${session.mbLevel}==100"
+												class="dropdown-item border-radius-md"> <span>Admin</span>
+											</a>
+											<h6
+												class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1 mt-3">
+												Account Management</h6>
+											<a th:href="@{logout}" class="dropdown-item border-radius-md">
+												<span>Logout</span>
+											</a><a th:href="@{drawal}" class="dropdown-item border-radius-md">
+												<span>Drawal</span>
+											</a>
 										</div>
 									</div></li>
+								<li class="nav-item dropdown dropdown-hover mx-2" th:if="${session.mbLevel}==100"><a
+									class="nav-link ps-2 d-flex cursor-pointer align-items-center"
+									id="dropdownMenuPages" data-bs-toggle="dropdown"
+									aria-expanded="false"> <i
+										class="material-icons opacity-6 me-2 text-md">dashboard</i>
+										Management<img src="img/down-arrow-dark.svg" alt="down-arrow"
+										class="arrow ms-auto ms-md-2">
+								</a>
+									<div
+										class="dropdown-menu dropdown-menu-animation ms-n3 dropdown-md p-3 border-radius-xl mt-0 mt-lg-3"
+										aria-labelledby="dropdownMenuPages">
+										<div class="d-none d-lg-block">
+											<h6
+												class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+												Memeber Management</h6>
+											<a th:href="@{mbList}" th:if="${session.mbLevel}==100"
+												class="dropdown-item border-radius-md"> <span>Admin</span>
+											</a>
+										</div>
 
+										<div class="d-lg-none">
+											<h6
+												class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
+												Memeber Management</h6>
+											<a th:href="@{mbList}" th:if="${session.mbLevel}==100"
+												class="dropdown-item border-radius-md"> <span>Admin</span>
+											</a>
+										</div>
+									</div></li>
 								<li class="nav-item ms-lg-auto"><a
 									class="nav-link nav-link-icon me-2"
 									href="https://github.com/MusicSNS" target="_blank"> <i

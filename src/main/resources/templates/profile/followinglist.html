@@ -22,30 +22,36 @@
 			</div>
 		</header>
 </div>
-<div class="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6 mb-2">
-<section class="py-lg-2">
-	<div class="card">
-  <div class="table-responsive">
-    <table class="table align-items-center mb-0">
-      <thead>
-        <tr>
-          <th style="text-align: center;" class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
-          <th style="text-align: center;" class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">NickName</th>
-          <th style="text-align: center;" class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Comment</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr th:each="item : ${followingitems}">
-          <td style="text-align: center;" th:text="${item.mbId}"></td>
-          <td style="text-align: center;"><a th:href="@{profile(mbName=${item.mbName})}" th:text="${item.mbName}"></a></td>
-          <td style="text-align: center;" th:text="${item.mbComment}"></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  </div>
-  </section>
-  </div>
+<div
+	class="card card-frame card-body blur shadow-blur mx-3 mx-md-4 mt-n6 mb-2">
+	<section class="py-lg-2">
+		<div class="card-body" style="margin-left: 6%">
+			<div class="table-responsive">
+				<table class="table align-items-center mb-0">
+					<thead>
+						<tr>
+							<th style="text-align: center;"
+								class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+							<th style="text-align: center;"
+								class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">NickName</th>
+							<th style="text-align: center;"
+								class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Comment</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="item : ${followingitems}">
+							<td style="text-align: center;" th:text="${item.mbId}"></td>
+							<td style="text-align: center;"><a
+								th:href="@{profile(mbName=${item.mbName})}"
+								th:text="${item.mbName}"></a></td>
+							<td style="text-align: center;" th:text="${item.mbComment}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</section>
+</div>
 </body>
 </html>
