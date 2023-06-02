@@ -443,6 +443,7 @@ public class FileListController {
 			String redirectPath = "profile" + "?mbName=" + flmbName;
 			CommonUtils.redirect(flmbName+"님 팔로우 취소!", redirectPath, response);
 		}
+		mav.addObject("duplecheck", duplecheck);
 		return mav;
 	}
 

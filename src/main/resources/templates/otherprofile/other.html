@@ -13,24 +13,6 @@
 <div th:include="fragments/header.html"></div>
 <div layout:fragment="content">
 
-	<body class="blog-author bg-gray-200" th:if="${othername==session.name}">
-		<header>
-			<div class="page-header min-height-400"
-				style="background-image: url('img/profilebackground.gif');"
-				loading="lazy">
-				<span class="mask bg-gradient-dark opacity-8"></span>
-			</div>
-		</header>
-		<div class="container">
-			<th:block th:include="profile/profile.html"></th:block>
-		</div>
-		<section class="py-3">
-			<div class="container">
-				<th:block th:include="profile/board.html"></th:block>
-			</div>
-		</section>
-	</body>
-	
 	<body class="blog-author bg-gray-200" th:unless="${othername==session.name}">
 		<header>
 			<div class="page-header min-height-400"

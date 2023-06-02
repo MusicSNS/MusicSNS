@@ -118,6 +118,10 @@ public class UserController {
 		mb.put("mbName", request.getParameter("mbName"));
 		int followingsize = profileService.selectcountfollowing(mb);
 		int followsize = profileService.selectcountfollow(mb);
+		HashMap<String, Object> mab = new HashMap<>();
+		mab.put("mbName", session.getAttribute("name"));
+		mab.put("flmbName", request.getParameter("mbName"));
+		int duplecheck = profileService.duplicatefollow(mab);
 		List<BoardListDomain> items = uploadService.authorBoardList(mb);
 		int size = uploadService.authorBoard(mb);
 		for (BoardListDomain item : items) {
@@ -137,6 +141,8 @@ public class UserController {
 			mav.addObject("profile", profile.getUpFilePath());
 		}
 		String comment = profileService.userSelectName(mb);
+		mav.addObject("duplecheck", duplecheck);
+		
 		mav.addObject("followingsize", followingsize);
 		mav.addObject("followsize", followsize);
 		mav.addObject("comment", comment);
