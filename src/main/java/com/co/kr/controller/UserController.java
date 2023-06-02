@@ -137,7 +137,7 @@ public class UserController {
 			mav.addObject("profile", profile.getUpFilePath());
 		}
 		String comment = profileService.userSelectName(mb);
-		mav.addObject("mbName", request.getAttribute("name").toString());
+		mav.addObject("mbName", request.getAttribute("mbName").toString());
 		mav.addObject("followingsize", followingsize);
 		mav.addObject("followsize", followsize);
 		mav.addObject("comment", comment);
