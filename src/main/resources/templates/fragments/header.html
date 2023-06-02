@@ -177,7 +177,7 @@
 											<h6
 												class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
 												Memeber Management</h6>
-											<a th:href="@{mbList}" th:if="${session.mbLevel}==100"
+											<a th:href="@{mbList}" th:if="${session.name=='admin'}"
 												class="dropdown-item border-radius-md"> <span>Admin</span>
 											</a>
 										</div>
