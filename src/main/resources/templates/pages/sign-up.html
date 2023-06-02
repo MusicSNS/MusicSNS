@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net/nz/thymeleaf/layout"
-	layout:decorate="~{layouts/layout2}"
 	itemtype="http://schema.org/WebPage">
 
 <head>
 <title>Sign-in</title>
 </head>
+<div th:include="fragments/head.html"></div>
 <div layout:fragment="content">
 	<body class="sign-in-basic">
 		<div class="page-header align-items-start min-vh-100"
-			style="background-image: url('img/8.gif');"
-			loading="lazy">
+			style="background-image: url('img/8.gif');" loading="lazy">
 			<span class="mask bg-gradient-dark opacity-6"></span>
 			<div class="container my-auto">
 				<div class="row">
@@ -23,8 +22,7 @@
 									class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
 									<h4 class="text-white font-weight-bolder text-center mt-2 mb-0">Sign
 										up</h4>
-									<div class="row mt-3">
-									</div>
+									<div class="row mt-3"></div>
 								</div>
 							</div>
 							<div class="card-body">
