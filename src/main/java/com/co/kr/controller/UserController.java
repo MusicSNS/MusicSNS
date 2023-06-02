@@ -110,7 +110,7 @@ public class UserController {
 		return mav;
 	}
 
-	@GetMapping(value = "/profile")
+	@GetMapping(value = "profile")
 	public ModelAndView profile(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView();
 		HttpSession session = request.getSession();
