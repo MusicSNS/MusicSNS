@@ -201,17 +201,17 @@ public class UserController {
 		loginDomain.setMbIp(CommonUtils.getClientIP(request));
 		loginDomain.setMbLevel((totalcount == 0) ? 100 : 1);
 		loginDomain.setMbUse("Y");
-		if (check(request) == 1) {
-			System.out.println(check(request));
+		if (check(request) == 0) {
+			userService.mbCreate(loginDomain);
+			mav.addObject("data", new AlertUtils("회원가입이 완료되었습니다.", "signin"));
+			System.out.println(request.getParameter("name") + "님 가입 완료");
+			mav.setViewName("alert/alert");
+			return mav;
+		} else {
 			mav.addObject("data", new AlertUtils("이메일이나 닉네임이 중복되었습니다.", "signup"));
 			mav.setViewName("alert/alert");
 			return mav;
 		}
-		userService.mbCreate(loginDomain);
-		mav.addObject("data", new AlertUtils("회원가입이 완료되었습니다.", "signin"));
-		System.out.println(request.getParameter("name")+"님 가입 완료");
-		mav.setViewName("alert/alert");
-		return mav;
 	}
 
 	// 아이디 중복확인
@@ -220,7 +220,7 @@ public class UserController {
 	public int check(HttpServletRequest request) {
 		String id = request.getParameter("id");
 		String name = request.getParameter("name");
-		Map<String, String> map = new HashMap();
+		HashMap<String, String> map = new HashMap<>();
 		map.put("mbId", id);
 		map.put("mbName", name);
 		int i = userService.mbDuplicationCheck(map);
@@ -323,7 +323,7 @@ public class UserController {
 				.mbLevel(Integer.parseInt(request.getParameter("level"))).mbComment(request.getParameter("comment"))
 				.mbIp(IP).mbUse("Y").mbId(request.getParameter("id")).build();
 		userService.mbUpdate(loginDomain);
-		System.out.println(request.getParameter("name")+"님 정보를 수정하였습니다.");
+		System.out.println(request.getParameter("name") + "님 정보를 수정하였습니다.");
 		mav.setViewName("redirect:/mbList");
 		return mav;
 	};
@@ -336,7 +336,7 @@ public class UserController {
 		HashMap map = new HashMap<String, String>();
 		map.put("mbId", request.getParameter("mbId"));
 		userService.mbRemove(map);
-		System.out.println(request.getParameter("mbId")+"님 계정을 삭제하였습니다.");
+		System.out.println(request.getParameter("mbId") + "님 계정을 삭제하였습니다.");
 		// 보고 있던 현재 페이지로 이동
 		mav.setViewName("redirect:/mbList");
 		return mav;
@@ -362,7 +362,7 @@ public class UserController {
 		}
 		userService.mbCreate(loginDomain);
 		mav.addObject("data", new AlertUtils("회원가입이 완료되었습니다.", "signin"));
-		System.out.println(request.getParameter("name").toString()+"으로 계정 생성 완료");
+		System.out.println(request.getParameter("name").toString() + "으로 계정 생성 완료");
 		mav.setViewName("redirect:/mbList");
 		return mav;
 	}
@@ -376,7 +376,7 @@ public class UserController {
 		uploadService.bdFileAllRemove(map);
 		uploadService.bdContentAllRemove(map);
 		userService.mbRemove(map);
-		System.out.println(session.getAttribute("name").toString()+"님 회원탈퇴 완료");
+		System.out.println(session.getAttribute("name").toString() + "님 회원탈퇴 완료");
 		session.invalidate();
 		String alertText = "회원탈퇴 되었습니다.";
 		String redirectPath = "/main";
