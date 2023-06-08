@@ -48,9 +48,6 @@ public class UploadServiceImple implements UploadService {
 	private UploadMapper uploadMapper;
 
 	@Autowired
-	private UserMapper userMapper;
-
-	@Autowired
 	private MusicMapper musicMapper;
 
 	@Override
