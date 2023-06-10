@@ -58,7 +58,7 @@ public class UserController {
 	// 진입점
 	@GetMapping("/")
 	public ModelAndView index() {
-		int random = (int) (Math.random() * 10) + 1;
+		int random = (int) (Math.random() * 11) + 1;
         ModelAndView mav = new ModelAndView();
 		mav.addObject("random", random);
 		mav.setViewName("pages/sign-in.html");
@@ -68,7 +68,7 @@ public class UserController {
 	// signin
 	@GetMapping("/signin")
 	public ModelAndView signin() {
-		int random = (int) (Math.random() * 10) + 1;
+		int random = (int) (Math.random() * 11) + 1;
         ModelAndView mav = new ModelAndView();
 		mav.addObject("random", random);
 		mav.setViewName("pages/sign-in.html");
