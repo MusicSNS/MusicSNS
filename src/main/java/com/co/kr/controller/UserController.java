@@ -63,8 +63,12 @@ public class UserController {
 
 	// signin
 	@GetMapping("/signin")
-	public String signin() {
-		return "pages/sign-in.html";
+	public ModelAndView signin() {
+		int random = (int) (Math.random() * 10) + 1;
+        ModelAndView mav = new ModelAndView();
+		mav.addObject("random", random);
+		mav.setViewName("pages/sign-in.html");
+		return mav;
 	}
 
 	// about
