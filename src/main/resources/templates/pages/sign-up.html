@@ -10,7 +10,7 @@
 <div layout:fragment="content">
 	<body class="sign-in-basic">
 		<div class="page-header align-items-start min-vh-100"
-			style="background-image: url('img/8.gif');" loading="lazy">
+			th:style="'background-image: url(\'' + @{'img/' + ${random} + '.gif'} + '\');'">
 			<span class="mask bg-gradient-dark opacity-6"></span>
 			<div class="container my-auto">
 				<div class="row">
@@ -46,11 +46,22 @@
 											up</button>
 									</div>
 								</form>
-
 							</div>
 						</div>
 					</div>
 				</div>
+				<br>
+				<div class="text-center">
+					<p>
+						<b style="color: white;">이쁜 노래 추천해요!</b>
+					</p>
+					<audio controls autoplay loop>
+						<source th:src="@{'audio/' + ${random} + '.mp3'}"
+							type="audio/mpeg">
+					</audio>
+
+				</div>
 			</div>
+		</div>
 	</body>
 </html>

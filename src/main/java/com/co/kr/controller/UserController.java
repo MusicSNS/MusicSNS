@@ -165,8 +165,12 @@ public class UserController {
 
 	// signup
 	@GetMapping("/signup")
-	public String signup() {
-		return "pages/sign-up.html";
+	public ModelAndView signup() {
+		int random = (int) (Math.random() * 11) + 1;
+        ModelAndView mav = new ModelAndView();
+		mav.addObject("random", random);
+		mav.setViewName("pages/sign-up.html");
+		return mav;
 	}
 
 	// 초기화면 설정
